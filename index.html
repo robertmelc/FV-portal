@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Evo 5 · Investor Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #080c14;
+    --surface:  #0e1520;
+    --surface2: #151e2e;
+    --border:   #1e2d42;
+    --accent:   #f0b429;
+    --accent2:  #00c9a7;
+    --text:     #d0dcea;
+    --dim:      #4a6080;
+    --red:      #e05252;
+    --white:    #ffffff;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'Inter', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    position:fixed; inset:0; z-index:100;
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .login-box {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-top:3px solid var(--accent);
+    border-radius:8px;
+    padding:48px 40px;
+    width:420px;
+    max-width:95vw;
+  }
+  .login-logo {
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:32px;
+  }
+  .login-sun {
+    width:44px; height:44px;
+    background:rgba(240,180,41,0.12);
+    border:1px solid var(--accent);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+  }
+  .login-brand { font-family:var(--mono); font-size:13px; }
+  .login-brand strong { color:var(--accent); display:block; font-size:15px; }
+  .login-title {
+    font-size:22px; font-weight:700; color:var(--white);
+    margin-bottom:6px;
+  }
+  .login-sub {
+    font-size:12px; color:var(--dim); margin-bottom:28px;
+    font-family:var(--mono);
+  }
+  .field { margin-bottom:16px; }
+  .field label {
+    display:block; font-size:11px; font-family:var(--mono);
+    color:var(--dim); letter-spacing:1px; margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .field input {
+    width:100%; background:var(--surface2);
+    border:1px solid var(--border);
+    color:var(--text); font-family:var(--mono); font-size:13px;
+    padding:10px 14px; border-radius:4px; outline:none;
+    transition:border-color .2s;
+  }
+  .field input:focus { border-color:var(--accent); }
+  .login-btn {
+    width:100%; padding:12px;
+    background:var(--accent); color:#000;
+    font-family:var(--sans); font-weight:700; font-size:14px;
+    border:none; border-radius:4px; cursor:pointer;
+    letter-spacing:0.5px; margin-top:8px;
+    transition:opacity .2s;
+  }
+  .login-btn:hover { opacity:0.9; }
+  .login-err {
+    font-family:var(--mono); font-size:11px; color:var(--red);
+    margin-top:10px; display:none; text-align:center;
+  }
+  .login-footer {
+    font-family:var(--mono); font-size:10px; color:var(--dim);
+    text-align:center; margin-top:24px;
+  }
+
+  /* ── APP ── */
+  #app { display:none; min-height:100vh; }
+
+  /* Header */
+  header {
+    position:sticky; top:0; z-index:50;
+    background:rgba(8,12,20,0.95);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 28px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:60px;
+  }
+  .h-left { display:flex; align-items:center; gap:14px; }
+  .h-sun {
+    width:36px; height:36px;
+    background:rgba(240,180,41,0.1);
+    border:1px solid rgba(240,180,41,0.3);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+  }
+  .h-title { font-family:var(--mono); font-size:13px; }
+  .h-title strong { color:var(--accent); }
+  .h-right { display:flex; align-items:center; gap:12px; }
+  .lang-btn {
+    font-family:var(--mono); font-size:10px; letter-spacing:1px;
+    padding:4px 10px; background:transparent;
+    border:1px solid var(--border); color:var(--dim);
+    border-radius:3px; cursor:pointer; transition:all .2s;
+  }
+  .lang-btn.active { border-color:var(--accent); color:var(--accent); }
+  .logout-btn {
+    font-family:var(--mono); font-size:10px;
+    padding:4px 10px; background:transparent;
+    border:1px solid var(--border); color:var(--dim);
+    border-radius:3px; cursor:pointer;
+  }
+  .logout-btn:hover { border-color:var(--red); color:var(--red); }
+  .user-tag {
+    font-family:var(--mono); font-size:10px; color:var(--dim);
+  }
+
+  /* Nav tabs */
+  nav {
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:0 28px;
+    display:flex; gap:4px;
+    overflow-x:auto;
+  }
+  .tab-btn {
+    font-family:var(--mono); font-size:11px; letter-spacing:0.5px;
+    padding:14px 18px;
+    background:transparent; border:none; color:var(--dim);
+    cursor:pointer; border-bottom:2px solid transparent;
+    white-space:nowrap; transition:all .2s;
+  }
+  .tab-btn:hover { color:var(--text); }
+  .tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  /* Content */
+  main { padding:32px 28px; max-width:1100px; margin:0 auto; }
+
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* Section header */
+  .section-tag {
+    font-family:var(--mono); font-size:10px; letter-spacing:2px;
+    color:var(--accent); margin-bottom:8px; text-transform:uppercase;
+  }
+  .section-title {
+    font-size:26px; font-weight:700; color:var(--white);
+    margin-bottom:6px;
+  }
+  .section-sub {
+    font-size:13px; color:var(--dim); margin-bottom:28px;
+    font-family:var(--mono);
+  }
+
+  /* Cards grid */
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; margin-bottom:24px; }
+  .card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:6px; padding:20px;
+    transition:border-color .2s;
+  }
+  .card:hover { border-color:rgba(240,180,41,0.3); }
+  .card-icon { font-size:28px; margin-bottom:10px; }
+  .card-title { font-size:15px; font-weight:600; color:var(--white); margin-bottom:6px; }
+  .card-desc { font-size:12px; color:var(--dim); line-height:1.7; }
+  .card-tag {
+    display:inline-block; margin-top:10px;
+    font-family:var(--mono); font-size:9px; letter-spacing:1px;
+    padding:2px 8px; border-radius:2px;
+    background:rgba(240,180,41,0.1); color:var(--accent);
+  }
+  .card-tag.green { background:rgba(0,201,167,0.1); color:var(--accent2); }
+  .card-tag.dim { background:rgba(74,96,128,0.2); color:var(--dim); }
+
+  /* Spec table */
+  .spec-table { background:var(--surface); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-bottom:20px; }
+  .spec-row { display:flex; border-bottom:1px solid var(--border); }
+  .spec-row:last-child { border-bottom:none; }
+  .spec-label { width:220px; padding:12px 16px; font-family:var(--mono); font-size:11px; color:var(--dim); background:var(--surface2); flex-shrink:0; }
+  .spec-val { padding:12px 16px; font-size:13px; color:var(--text); flex:1; }
+  .spec-val strong { color:var(--accent); }
+  .spec-val.gold { color:var(--accent); font-weight:600; font-family:var(--mono); }
+
+  /* Image */
+  .tech-img {
+    width:100%; border-radius:6px; border:1px solid var(--border);
+    margin-bottom:12px; display:block;
+  }
+  .img-caption {
+    font-family:var(--mono); font-size:10px; color:var(--dim);
+    margin-bottom:20px; text-align:center;
+  }
+
+  /* Video link */
+  .video-link {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(0,201,167,0.08);
+    border:1px solid rgba(0,201,167,0.25);
+    border-radius:4px; padding:12px 16px;
+    text-decoration:none; margin-bottom:20px;
+    transition:all .2s;
+  }
+  .video-link:hover { background:rgba(0,201,167,0.14); }
+  .video-link .play { font-size:20px; }
+  .video-link .vl-text { flex:1; }
+  .video-link .vl-label { font-size:12px; color:var(--accent2); font-weight:600; }
+  .video-link .vl-url { font-family:var(--mono); font-size:10px; color:var(--dim); }
+  .video-link .arr { color:var(--accent2); font-size:16px; }
+
+  /* Metrics strip */
+  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:24px; }
+  .metric {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; padding:16px; text-align:center;
+  }
+  .metric-val { font-family:var(--mono); font-size:22px; color:var(--accent); font-weight:600; margin-bottom:4px; }
+  .metric-val.teal { color:var(--accent2); }
+  .metric-val.silver { color:#b0c0d0; }
+  .metric-label { font-size:11px; color:var(--dim); }
+
+  /* Info box */
+  .infobox {
+    background:rgba(240,180,41,0.06);
+    border:1px solid rgba(240,180,41,0.2);
+    border-radius:4px; padding:14px 18px; margin-bottom:20px;
+  }
+  .infobox.blue { background:rgba(0,201,167,0.06); border-color:rgba(0,201,167,0.2); }
+  .infobox-label { font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:1px; margin-bottom:6px; }
+  .infobox.blue .infobox-label { color:var(--accent2); }
+  .infobox-text { font-size:13px; color:var(--dim); line-height:1.7; }
+
+  /* Divider */
+  .divider { border:none; border-top:1px solid var(--border); margin:28px 0; }
+
+  /* Coming soon */
+  .coming-soon {
+    text-align:center; padding:80px 20px;
+    border:1px dashed var(--border);
+    border-radius:6px; margin-top:20px;
+  }
+  .coming-soon .icon { font-size:48px; margin-bottom:16px; }
+  .coming-soon h3 { color:var(--text); font-size:18px; margin-bottom:8px; }
+  .coming-soon p { color:var(--dim); font-size:13px; font-family:var(--mono); }
+
+  /* Footer */
+  footer {
+    border-top:1px solid var(--border);
+    padding:16px 28px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:10px; color:var(--dim);
+  }
+
+  @media(max-width:600px) {
+    header { padding:0 16px; }
+    main { padding:20px 16px; }
+    .spec-label { width:130px; }
+    .h-title { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-sun">☀️</div>
+      <div class="login-brand">
+        <strong>ROOMS MANAGEMENT</strong>
+        Investor Portal · Solar Evo 5
+      </div>
+    </div>
+    <div class="login-title" id="lt">Přihlášení</div>
+    <div class="login-sub" id="ls">Zadejte přihlašovací údaje pro přístup k dokumentaci</div>
+    <div class="field">
+      <label id="ll-email">E-MAIL</label>
+      <input type="email" id="inp-email" placeholder="vas@email.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label id="ll-pass">HESLO</label>
+      <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password"
+        onkeypress="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()" id="lb">Přihlásit se →</button>
+    <div class="login-err" id="login-err" id="le">Nesprávný e-mail nebo heslo.</div>
+    <div class="login-footer" id="lf">ROOMS MANAGEMENT s.r.o. · Přístup pouze pro autorizované osoby</div>
+  </div>
+</div>
+
+<!-- ══ APP ══════════════════════════════════════════════════════════ -->
+<div id="app">
+  <header>
+    <div class="h-left">
+      <div class="h-sun">☀</div>
+      <div class="h-title"><strong>Solar Evo 5</strong> · <span id="hbrand">Investor Portal</span></div>
+    </div>
+    <div class="h-right">
+      <span class="user-tag" id="user-tag"></span>
+      <button class="lang-btn active" onclick="setLang('cs')" id="btn-cs">CZ</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      <button class="lang-btn" onclick="setLang('kk')" id="btn-kk">ҚАЗ</button>
+      <button class="logout-btn" onclick="doLogout()" id="logoutbtn">Odhlásit</button>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab-btn active" onclick="switchTab('tech')" id="tab-tech" data-i="tab_tech">A · Dokumentace Technologie</button>
+    <button class="tab-btn" onclick="switchTab('biz')" id="tab-biz" data-i="tab_biz">B · Business Case</button>
+    <button class="tab-btn" onclick="switchTab('cert')" id="tab-cert" data-i="tab_cert">C · Certifikační laboratoř</button>
+    <button class="tab-btn" onclick="switchTab('legal')" id="tab-legal" data-i="tab_legal">D · Smluvní dokumentace</button>
+  </nav>
+
+  <main>
+
+    <!-- TAB A: DOKUMENTACE TECHNOLOGIE -->
+    <div class="tab-content active" id="tab-tech-content">
+      <div class="section-tag" data-i="tag_a">A · DOKUMENTACE TECHNOLOGIE</div>
+      <div class="section-title" data-i="title_a">Výrobní linka Solar Evo 5</div>
+      <div class="section-sub" data-i="sub_a">Comton Industriale · Italský výrobce průmyslových recyklačních linek · Most-Rudolice</div>
+
+      <img src="https://raw.githubusercontent.com/robertmelc/FV-portal/main/solar_evo_5.png" class="tech-img" id="solar-img" alt="Solar Evo 5">
+      <div class="img-caption" data-i="img_cap">Comton Industriale – Solar Evo 5 · Průmyslová linka pro recyklaci fotovoltaických panelů</div>
+
+      <a href="https://www.youtube.com/watch?v=4qca8cObFF8&t=89s" target="_blank" class="video-link">
+        <span class="play">▶</span>
+        <div class="vl-text">
+          <div class="vl-label" data-i="vid_label">Video – Solar Evo 5 v provozu</div>
+          <div class="vl-url">youtube.com/watch?v=4qca8cObFF8&t=89s</div>
+        </div>
+        <span class="arr">↗</span>
+      </a>
+
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="sp_mfr">Výrobce</div><div class="spec-val"><strong>Comton Industriale</strong></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_model">Model</div><div class="spec-val"><strong>Solar Evo 5</strong></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_cap">Kapacita</div><div class="spec-val">1 t / hodinu (~50 panelů)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_out">Výstupní komodity</div><div class="spec-val">Ag · Cu · Si · sklo · Al</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_price">Cena linky</div><div class="spec-val gold">~1 mil. EUR</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_del">Termín dodání</div><div class="spec-val gold">6 měsíců od objednávky</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_cert">Certifikace</div><div class="spec-val">WEEELABEX (probíhá)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_origin">Původ</div><div class="spec-val">Itálie 🇮🇹</div></div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">0,70 kg</div><div class="metric-label" data-i="m_ag">Ag z 1 tuny panelů</div></div>
+        <div class="metric"><div class="metric-val teal">~1 400 kg</div><div class="metric-label" data-i="m_agy">Ag ročně (~2 000 hod)</div></div>
+        <div class="metric"><div class="metric-val silver">5</div><div class="metric-label" data-i="m_com">Výstupních komodit</div></div>
+        <div class="metric"><div class="metric-val">6 měs.</div><div class="metric-label" data-i="m_del2">Dodací lhůta</div></div>
+      </div>
+
+      <div class="infobox">
+        <div class="infobox-label" data-i="ib_proc">PROCES RECYKLACE</div>
+        <div class="infobox-text" data-i="ib_proc_text">
+          Příjem a evidence panelů → Demontáž Al rámu → Oddělení kaleného skla → Chemická recyklace EVA fólie → Extrakce Ag · Cu · Si → Expedice výstupních komodit
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB B: BUSINESS CASE -->
+    <div class="tab-content" id="tab-biz-content">
+      <div class="section-tag" data-i="tag_b">B · BUSINESS CASE</div>
+      <div class="section-title" data-i="title_b">Finanční model a investiční příležitost</div>
+      <div class="section-sub" data-i="sub_b">Recyklace FV panelů · Most-Rudolice · ROOMS MANAGEMENT s.r.o.</div>
+
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">~1 mil. EUR</div><div class="metric-label" data-i="bm_inv">Celková investice</div></div>
+        <div class="metric"><div class="metric-val teal">+24 031 Kč</div><div class="metric-label" data-i="bm_hr">Zisk / hodinu</div></div>
+        <div class="metric"><div class="metric-val">70–95 mil.</div><div class="metric-label" data-i="bm_ebitda">EBITDA / rok (Kč)</div></div>
+        <div class="metric"><div class="metric-val silver">&lt; 12 měs.</div><div class="metric-label" data-i="bm_roi">Návratnost</div></div>
+      </div>
+
+      <div class="spec-table">
+        <div class="spec-row" style="background:var(--surface2)"><div class="spec-label" style="color:var(--accent);font-weight:600;" data-i="bt_rev">PŘÍJEM / hodinu</div><div class="spec-val"></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_buy">Nákup FV panelů</div><div class="spec-val">+2 500 Kč</div></div>
+        <div class="spec-row" style="background:var(--surface2)"><div class="spec-label" style="color:var(--accent);font-weight:600;" data-i="bt_sale">PRODEJ KOMODIT</div><div class="spec-val"></div></div>
+        <div class="spec-row"><div class="spec-label">Al rám (100 kg)</div><div class="spec-val">+2 000 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_glass">Sklo (775 kg)</div><div class="spec-val">+3 875 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_si">Křemík (75 kg)</div><div class="spec-val">+6 000 Kč</div></div>
+        <div class="spec-row"><div class="spec-label">Stříbro Ag (0,70 kg)</div><div class="spec-val gold">+14 000 Kč</div></div>
+        <div class="spec-row"><div class="spec-label">Měď Cu (10 kg)</div><div class="spec-val">+1 600 Kč</div></div>
+        <div class="spec-row" style="background:var(--surface2)"><div class="spec-label" style="color:var(--red);font-weight:600;" data-i="bt_cost">NÁKLADY</div><div class="spec-val"></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_staff">Zaměstnanci (13 os.)</div><div class="spec-val" style="color:var(--red)">−3 640 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_energy">Energie</div><div class="spec-val" style="color:var(--red)">−382 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_mgmt">Management</div><div class="spec-val" style="color:var(--red)">−1 022 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="bt_other">Ostatní</div><div class="spec-val" style="color:var(--red)">−900 Kč</div></div>
+        <div class="spec-row" style="background:rgba(240,180,41,0.08);border-top:2px solid var(--accent)">
+          <div class="spec-label" style="color:var(--accent);font-weight:700;" data-i="bt_profit">ZISK / HODINU</div>
+          <div class="spec-val gold" style="font-size:18px;">+24 031 Kč</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-title" data-i="bc_struct">Struktura spolupráce</div>
+          <div class="card-desc" data-i="bc_struct_text">Odštěpný závod · Franchise model · 50/50 rozdělení zisku. Investor vkládá kapitál, ROOMS MANAGEMENT vkládá know-how, IČZ a klíčové zaměstnance.</div>
+          <span class="card-tag">50 / 50</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title" data-i="bc_legal">Legislativní základ</div>
+          <div class="card-desc" data-i="bc_legal_text">EU direktiva 2012/19/EU (WEEE) nařizuje sběr a recyklaci FV panelů. Kolektivní systém REsolar s.r.o. zajišťuje dodávku vstupní suroviny.</div>
+          <span class="card-tag green">Garantovaný vstup</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🥈</div>
+          <div class="card-title" data-i="bc_ag">Stříbro jako klíčová hodnota</div>
+          <div class="card-desc" data-i="bc_ag_text">0,70 kg Ag / tunu panelů. Při ~2 000 provozních hodinách ročně: ~1 400 kg Ag/rok. Při spot ceně $75/oz ≈ 3 mil. Kč ročně jen ze stříbra.</div>
+          <span class="card-tag">~1 400 kg Ag / rok</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB C: CERTIFIKAČNÍ LABORATOŘ -->
+    <div class="tab-content" id="tab-cert-content">
+      <div class="section-tag" data-i="tag_c">C · CERTIFIKAČNÍ LABORATOŘ</div>
+      <div class="section-title" data-i="title_c">WEEELABEX Certifikace</div>
+      <div class="section-sub" data-i="sub_c">Conformity & Verification · Audit v současné době probíhá</div>
+
+      <div class="infobox blue">
+        <div class="infobox-label" data-i="cert_status">AKTUÁLNÍ STAV</div>
+        <div class="infobox-text" data-i="cert_status_text">Audit WEEELABEX Conformity & Verification je v průběhu. Certifikace je podmínkou pro uzavření finální smlouvy s kolektivním systémem REsolar s.r.o. na dodávku FV panelů.</div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔬</div>
+          <div class="card-title">WEEELABEX</div>
+          <div class="card-desc" data-i="cert_weee_text">Mezinárodní standard pro recyklaci elektrozařízení. Audit zahrnuje technologické procesy, výtěžnost materiálů a environmentální compliance.</div>
+          <span class="card-tag dim" data-i="cert_ongoing">Probíhá</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📄</div>
+          <div class="card-title" data-i="cert_resolar">REsolar s.r.o.</div>
+          <div class="card-desc" data-i="cert_resolar_text">Kolektivní systém WEEE pro FV panely. Smlouva o smlouvě budoucí podepsána. Finální smlouva na dodávku po dokončení certifikace WEEELABEX.</div>
+          <span class="card-tag green" data-i="cert_signed">Předsmlouva podepsána</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏛️</div>
+          <div class="card-title" data-i="cert_icz">IČZ Licence</div>
+          <div class="card-desc" data-i="cert_icz_text">IČZ CZU01425 – stacionární zařízení. IČZ CZA01672 – mobilní zpracování. Obě licence aktivní, vydány příslušným krajským úřadem.</div>
+          <span class="card-tag green" data-i="cert_active">Aktivní</span>
+        </div>
+      </div>
+
+      <div class="coming-soon">
+        <div class="icon">📁</div>
+        <h3 data-i="cert_docs_title">Certifikační dokumenty</h3>
+        <p data-i="cert_docs_sub">Dokumenty budou přidány po dokončení auditu WEEELABEX</p>
+      </div>
+    </div>
+
+    <!-- TAB D: SMLUVNÍ DOKUMENTACE -->
+    <div class="tab-content" id="tab-legal-content">
+      <div class="section-tag" data-i="tag_d">D · SMLUVNÍ DOKUMENTACE</div>
+      <div class="section-title" data-i="title_d">Smluvní zázemí projektu</div>
+      <div class="section-sub" data-i="sub_d">Připravené a uzavřené smlouvy · Most-Rudolice</div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title" data-i="leg_resolar">REsolar s.r.o. – Předsmlouva</div>
+          <div class="card-desc" data-i="leg_resolar_text">Smlouva o smlouvě budoucí na dodávku FV panelů prostřednictvím kolektivního systému WEEE. Podmínka: dokončení auditu WEEELABEX.</div>
+          <span class="card-tag green" data-i="leg_signed">Podepsána</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏭</div>
+          <div class="card-title" data-i="leg_comton">Comton Industriale – Nabídka</div>
+          <div class="card-desc" data-i="leg_comton_text">Nabídka na dodávku linky Solar Evo 5 včetně instalace, školení obsluhy a záruky. Cena ~1 mil. EUR, dodací lhůta 6 měsíců od objednávky.</div>
+          <span class="card-tag dim" data-i="leg_prep">V přípravě</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-title" data-i="leg_jv">JV Smlouva – Odštěpný závod</div>
+          <div class="card-desc" data-i="leg_jv_text">Smlouva o společném podniku mezi investorem a ROOMS MANAGEMENT s.r.o. Franchise model 50/50. Správa a provoz zajišťuje RM, investor pasivní role.</div>
+          <span class="card-tag dim" data-i="leg_prep2">K přípravě</span>
+        </div>
+      </div>
+
+      <div class="coming-soon">
+        <div class="icon">🔒</div>
+        <h3 data-i="leg_docs_title">Dokumenty ke stažení</h3>
+        <p data-i="leg_docs_sub">Smlouvy a právní dokumenty budou zpřístupněny po podpisu NDA</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>ROOMS MANAGEMENT s.r.o. · IČZ CZU01425 · IČZ CZA01672</span>
+    <span data-i="footer_conf">Důvěrné · Pouze pro autorizované osoby</span>
+  </footer>
+</div>
+
+<script>
+// ── USERS (email: heslo) ─────────────────────────────────────────────
+// Přidej/odeber uživatele zde:
+const USERS = {
+  'robert.melc@gmail.com': 'RM2026admin',
+  'investor1@example.com': 'Solar2026',
+  'investor2@example.com': 'Solar2026',
+  'investor3@example.com': 'Solar2026',
+  'investor4@example.com': 'Solar2026',
+};
+
+// ── TRANSLATIONS ─────────────────────────────────────────────────────
+const T = {
+  cs: {
+    lt:'Přihlášení', ls:'Zadejte přihlašovací údaje pro přístup k dokumentaci',
+    ll_email:'E-MAIL', ll_pass:'HESLO', lb:'Přihlásit se →',
+    le:'Nesprávný e-mail nebo heslo.',
+    lf:'ROOMS MANAGEMENT s.r.o. · Přístup pouze pro autorizované osoby',
+    hbrand:'Investor Portal', logoutbtn:'Odhlásit',
+    tab_tech:'A · Dokumentace Technologie', tab_biz:'B · Business Case',
+    tab_cert:'C · Certifikační laboratoř', tab_legal:'D · Smluvní dokumentace',
+    tag_a:'A · DOKUMENTACE TECHNOLOGIE', title_a:'Výrobní linka Solar Evo 5',
+    sub_a:'Comton Industriale · Italský výrobce průmyslových recyklačních linek · Most-Rudolice',
+    img_cap:'Comton Industriale – Solar Evo 5 · Průmyslová linka pro recyklaci fotovoltaických panelů',
+    vid_label:'Video – Solar Evo 5 v provozu',
+    sp_mfr:'Výrobce', sp_model:'Model', sp_cap:'Kapacita', sp_out:'Výstupní komodity',
+    sp_price:'Cena linky', sp_del:'Termín dodání', sp_cert:'Certifikace', sp_origin:'Původ',
+    m_ag:'Ag z 1 tuny panelů', m_agy:'Ag ročně (~2 000 hod)', m_com:'Výstupních komodit', m_del2:'Dodací lhůta',
+    ib_proc:'PROCES RECYKLACE',
+    ib_proc_text:'Příjem a evidence panelů → Demontáž Al rámu → Oddělení kaleného skla → Chemická recyklace EVA fólie → Extrakce Ag · Cu · Si → Expedice výstupních komodit',
+    tag_b:'B · BUSINESS CASE', title_b:'Finanční model a investiční příležitost',
+    sub_b:'Recyklace FV panelů · Most-Rudolice · ROOMS MANAGEMENT s.r.o.',
+    bm_inv:'Celková investice', bm_hr:'Zisk / hodinu', bm_ebitda:'EBITDA / rok (Kč)', bm_roi:'Návratnost',
+    bt_rev:'PŘÍJEM / hodinu', bt_buy:'Nákup FV panelů', bt_sale:'PRODEJ KOMODIT',
+    bt_glass:'Sklo (775 kg)', bt_si:'Křemík (75 kg)', bt_cost:'NÁKLADY',
+    bt_staff:'Zaměstnanci (13 os.)', bt_energy:'Energie', bt_mgmt:'Management', bt_other:'Ostatní', bt_profit:'ZISK / HODINU',
+    bc_struct:'Struktura spolupráce', bc_struct_text:'Odštěpný závod · Franchise model · 50/50 rozdělení zisku. Investor vkládá kapitál, ROOMS MANAGEMENT vkládá know-how, IČZ a klíčové zaměstnance.',
+    bc_legal:'Legislativní základ', bc_legal_text:'EU direktiva 2012/19/EU (WEEE) nařizuje sběr a recyklaci FV panelů. Kolektivní systém REsolar s.r.o. zajišťuje dodávku vstupní suroviny.',
+    bc_ag:'Stříbro jako klíčová hodnota', bc_ag_text:'0,70 kg Ag / tunu panelů. Při ~2 000 provozních hodinách ročně: ~1 400 kg Ag/rok. Při spot ceně $75/oz ≈ 3 mil. Kč ročně jen ze stříbra.',
+    tag_c:'C · CERTIFIKAČNÍ LABORATOŘ', title_c:'WEEELABEX Certifikace', sub_c:'Conformity & Verification · Audit v současné době probíhá',
+    cert_status:'AKTUÁLNÍ STAV', cert_status_text:'Audit WEEELABEX Conformity & Verification je v průběhu. Certifikace je podmínkou pro uzavření finální smlouvy s kolektivním systémem REsolar s.r.o. na dodávku FV panelů.',
+    cert_weee_text:'Mezinárodní standard pro recyklaci elektrozařízení. Audit zahrnuje technologické procesy, výtěžnost materiálů a environmentální compliance.',
+    cert_ongoing:'Probíhá', cert_resolar:'REsolar s.r.o.',
+    cert_resolar_text:'Kolektivní systém WEEE pro FV panely. Smlouva o smlouvě budoucí podepsána. Finální smlouva na dodávku po dokončení certifikace WEEELABEX.',
+    cert_signed:'Předsmlouva podepsána', cert_icz:'IČZ Licence',
+    cert_icz_text:'IČZ CZU01425 – stacionární zařízení. IČZ CZA01672 – mobilní zpracování. Obě licence aktivní.',
+    cert_active:'Aktivní', cert_docs_title:'Certifikační dokumenty',
+    cert_docs_sub:'Dokumenty budou přidány po dokončení auditu WEEELABEX',
+    tag_d:'D · SMLUVNÍ DOKUMENTACE', title_d:'Smluvní zázemí projektu', sub_d:'Připravené a uzavřené smlouvy · Most-Rudolice',
+    leg_resolar:'REsolar s.r.o. – Předsmlouva', leg_resolar_text:'Smlouva o smlouvě budoucí na dodávku FV panelů prostřednictvím kolektivního systému WEEE. Podmínka: dokončení auditu WEEELABEX.',
+    leg_signed:'Podepsána', leg_comton:'Comton Industriale – Nabídka',
+    leg_comton_text:'Nabídka na dodávku linky Solar Evo 5 včetně instalace, školení obsluhy a záruky. Cena ~1 mil. EUR, dodací lhůta 6 měsíců od objednávky.',
+    leg_prep:'V přípravě', leg_jv:'JV Smlouva – Odštěpný závod',
+    leg_jv_text:'Smlouva o společném podniku mezi investorem a ROOMS MANAGEMENT s.r.o. Franchise model 50/50. Správa a provoz zajišťuje RM, investor pasivní role.',
+    leg_prep2:'K přípravě', leg_docs_title:'Dokumenty ke stažení',
+    leg_docs_sub:'Smlouvy a právní dokumenty budou zpřístupněny po podpisu NDA',
+    footer_conf:'Důvěrné · Pouze pro autorizované osoby',
+  },
+  en: {
+    lt:'Sign In', ls:'Enter your credentials to access the investor documentation',
+    ll_email:'EMAIL', ll_pass:'PASSWORD', lb:'Sign In →',
+    le:'Incorrect email or password.',
+    lf:'ROOMS MANAGEMENT s.r.o. · Authorised access only',
+    hbrand:'Investor Portal', logoutbtn:'Sign Out',
+    tab_tech:'A · Technology Documentation', tab_biz:'B · Business Case',
+    tab_cert:'C · Certification Lab', tab_legal:'D · Legal Documentation',
+    tag_a:'A · TECHNOLOGY DOCUMENTATION', title_a:'Production Line Solar Evo 5',
+    sub_a:'Comton Industriale · Italian manufacturer of industrial recycling lines · Most-Rudolice',
+    img_cap:'Comton Industriale – Solar Evo 5 · Industrial solar panel recycling line',
+    vid_label:'Video – Solar Evo 5 in operation',
+    sp_mfr:'Manufacturer', sp_model:'Model', sp_cap:'Capacity', sp_out:'Output commodities',
+    sp_price:'Line price', sp_del:'Delivery time', sp_cert:'Certification', sp_origin:'Origin',
+    m_ag:'Ag per tonne of panels', m_agy:'Ag per year (~2,000 hrs)', m_com:'Output commodities', m_del2:'Lead time',
+    ib_proc:'RECYCLING PROCESS',
+    ib_proc_text:'Panel intake & registration → Al frame dismantling → Tempered glass separation → Chemical EVA film recycling → Ag · Cu · Si extraction → Commodity dispatch',
+    tag_b:'B · BUSINESS CASE', title_b:'Financial model and investment opportunity',
+    sub_b:'Solar panel recycling · Most-Rudolice · ROOMS MANAGEMENT s.r.o.',
+    bm_inv:'Total investment', bm_hr:'Profit / hour', bm_ebitda:'EBITDA / year (CZK)', bm_roi:'Payback period',
+    bt_rev:'REVENUE / hour', bt_buy:'Purchase of solar panels', bt_sale:'COMMODITY SALES',
+    bt_glass:'Glass (775 kg)', bt_si:'Silicon (75 kg)', bt_cost:'COSTS',
+    bt_staff:'Staff (13 persons)', bt_energy:'Energy', bt_mgmt:'Management', bt_other:'Other', bt_profit:'PROFIT / HOUR',
+    bc_struct:'Cooperation structure', bc_struct_text:'Branch entity · Franchise model · 50/50 profit split. Investor contributes capital, ROOMS MANAGEMENT contributes know-how, operating licences and key personnel.',
+    bc_legal:'Legal mandate', bc_legal_text:'EU Directive 2012/19/EU (WEEE) mandates collection and recycling of solar panels. The REsolar s.r.o. collective system ensures supply of input material.',
+    bc_ag:'Silver as key value driver', bc_ag_text:'0.70 kg Ag per tonne of panels. At ~2,000 operating hours per year: ~1,400 kg Ag/year. At spot price $75/oz ≈ $3.3M per year from silver alone.',
+    tag_c:'C · CERTIFICATION LAB', title_c:'WEEELABEX Certification', sub_c:'Conformity & Verification · Audit currently in progress',
+    cert_status:'CURRENT STATUS', cert_status_text:'WEEELABEX Conformity & Verification audit is ongoing. Certification is a prerequisite for finalising the supply agreement with the REsolar s.r.o. collective system.',
+    cert_weee_text:'International standard for e-waste recycling. Audit covers technological processes, material recovery rates and environmental compliance.',
+    cert_ongoing:'In progress', cert_resolar:'REsolar s.r.o.',
+    cert_resolar_text:'WEEE collective system for solar panels. Preliminary agreement signed. Final supply agreement pending WEEELABEX certification.',
+    cert_signed:'Pre-agreement signed', cert_icz:'IČZ Licences',
+    cert_icz_text:'IČZ CZU01425 – stationary facility. IČZ CZA01672 – mobile processing. Both licences active, issued by the regional authority.',
+    cert_active:'Active', cert_docs_title:'Certification Documents',
+    cert_docs_sub:'Documents will be added upon completion of the WEEELABEX audit',
+    tag_d:'D · LEGAL DOCUMENTATION', title_d:'Project legal framework', sub_d:'Prepared and signed agreements · Most-Rudolice',
+    leg_resolar:'REsolar s.r.o. – Pre-agreement', leg_resolar_text:'Preliminary supply agreement for solar panels via the WEEE collective system. Condition: completion of WEEELABEX audit.',
+    leg_signed:'Signed', leg_comton:'Comton Industriale – Offer',
+    leg_comton_text:'Offer for Solar Evo 5 line delivery including installation, operator training and warranty. Price ~€1.0M, delivery 6 months from order.',
+    leg_prep:'In preparation', leg_jv:'JV Agreement – Branch Entity',
+    leg_jv_text:'Joint venture agreement between investor and ROOMS MANAGEMENT s.r.o. Franchise model 50/50. Operations managed by RM, investor passive role.',
+    leg_prep2:'To be prepared', leg_docs_title:'Documents for Download',
+    leg_docs_sub:'Agreements and legal documents will be made available after NDA signing',
+    footer_conf:'Confidential · Authorised access only',
+  },
+  kk: {
+    lt:'Кіру', ls:'Инвестор құжаттамасына қол жеткізу үшін деректеріңізді енгізіңіз',
+    ll_email:'ЭЛЕКТРОНДЫҚ ПОШТА', ll_pass:'ҚУП СӨЗ', lb:'Кіру →',
+    le:'Электрондық пошта немесе құпия сөз қате.',
+    lf:'ROOMS MANAGEMENT s.r.o. · Тек уәкілетті тұлғалар үшін',
+    hbrand:'Инвестор порталы', logoutbtn:'Шығу',
+    tab_tech:'А · Технология құжаттамасы', tab_biz:'Ә · Бизнес-кейс',
+    tab_cert:'Б · Сертификаттау зертханасы', tab_legal:'В · Шарттық құжаттама',
+    tag_a:'А · ТЕХНОЛОГИЯ ҚҰЖАТТАМАСЫ', title_a:'Solar Evo 5 өндірістік желісі',
+    sub_a:'Comton Industriale · Италиялық өнеркәсіптік қайта өңдеу желілерінің өндірушісі · Most-Rudolice',
+    img_cap:'Comton Industriale – Solar Evo 5 · Күн панельдерін қайта өңдеуге арналған өнеркәсіптік желі',
+    vid_label:'Бейне – Solar Evo 5 жұмыста',
+    sp_mfr:'Өндіруші', sp_model:'Модель', sp_cap:'Өнімділік', sp_out:'Шығыс тауарлары',
+    sp_price:'Желі бағасы', sp_del:'Жеткізу мерзімі', sp_cert:'Сертификат', sp_origin:'Шығу елі',
+    m_ag:'1 тонна панельден Ag', m_agy:'Жылына Ag (~2 000 сағ)', m_com:'Шығыс тауарлары', m_del2:'Жеткізу мерзімі',
+    ib_proc:'ҚАЙТА ӨҢДЕУ ПРОЦЕСІ',
+    ib_proc_text:'Панельдерді қабылдау → Al жақтауын бөлшектеу → Шыныны бөлу → EVA фольгасын химиялық қайта өңдеу → Ag · Cu · Si экстракциясы → Тауарларды жіберу',
+    tag_b:'Ә · БИЗНЕС-КЕЙС', title_b:'Қаржылық модель және инвестициялық мүмкіндік',
+    sub_b:'КҮН ПАНЕЛЬДЕРІН ҚАЙТА ӨҢДЕУ · Most-Rudolice · ROOMS MANAGEMENT s.r.o.',
+    bm_inv:'Жалпы инвестиция', bm_hr:'Кіріс / сағ', bm_ebitda:'EBITDA / жыл (CZK)', bm_roi:'Өтелу мерзімі',
+    bt_rev:'КІРІС / сағат', bt_buy:'Күн панельдерін сатып алу', bt_sale:'ТАУАР САТЫЛЫМЫ',
+    bt_glass:'Шыны (775 кг)', bt_si:'Кремний (75 кг)', bt_cost:'ШЫҒЫНДАР',
+    bt_staff:'Қызметкерлер (13 адам)', bt_energy:'Энергия', bt_mgmt:'Менеджмент', bt_other:'Басқа', bt_profit:'КІРіс / САҒАТ',
+    bc_struct:'Ынтымақтастық құрылымы', bc_struct_text:'Бөлімше · Франчайзинг моделі · 50/50 пайда бөлу. Инвестор капитал салады, ROOMS MANAGEMENT ноу-хау, лицензиялар мен негізгі қызметкерлерді береді.',
+    bc_legal:'Заңнамалық негіз', bc_legal_text:'ЕО директивасы 2012/19/EU (WEEE) күн панельдерін жинауды және қайта өңдеуді міндеттейді. REsolar s.r.o. ұжымдық жүйесі шикізатты жеткізуді қамтамасыз етеді.',
+    bc_ag:'Күміс – негізгі құндылық', bc_ag_text:'Панельдің 1 тоннасынан 0,70 кг Ag. Жылына ~2 000 жұмыс сағатында: ~1 400 кг Ag/жыл. Spot бағасы $75/унция болғанда ≈ тек күмістен $3,3 млн/жыл.',
+    tag_c:'Б · СЕРТИФИКАТТАУ ЗЕРТХАНАСЫ', title_c:'WEEELABEX Сертификаттауы', sub_c:'Conformity & Verification · Аудит жүргізілуде',
+    cert_status:'АҒЫМДАҒЫ КҮЙ', cert_status_text:'WEEELABEX Conformity & Verification аудиті жүргізілуде. Сертификаттау REsolar s.r.o. ұжымдық жүйесімен жеткізу шартын жасасу үшін шарт болып табылады.',
+    cert_weee_text:'Электрондық қалдықтарды қайта өңдеуге арналған халықаралық стандарт. Аудит технологиялық процестерді, материал өнімділігін және экологиялық сәйкестікті қамтиды.',
+    cert_ongoing:'Жүргізілуде', cert_resolar:'REsolar s.r.o.',
+    cert_resolar_text:'Күн панельдеріне арналған WEEE ұжымдық жүйесі. Алдын ала келісім шарты қол қойылды. WEEELABEX сертификатынан кейін жеткізу шарты жасалады.',
+    cert_signed:'Алдын ала шарт қол қойылды', cert_icz:'IČZ Лицензиялары',
+    cert_icz_text:'IČZ CZU01425 – стационарлық қондырғы. IČZ CZA01672 – мобильді өңдеу. Екі лицензия да белсенді.',
+    cert_active:'Белсенді', cert_docs_title:'Сертификаттау құжаттары',
+    cert_docs_sub:'WEEELABEX аудиті аяқталғаннан кейін құжаттар қосылады',
+    tag_d:'В · ШАРТТЫҚ ҚҰЖАТТАМА', title_d:'Жобаның шарттық базасы', sub_d:'Дайын және жасалған шарттар · Most-Rudolice',
+    leg_resolar:'REsolar s.r.o. – Алдын ала шарт', leg_resolar_text:'WEEE ұжымдық жүйесі арқылы күн панельдерін жеткізуге арналған алдын ала шарт. Шарт: WEEELABEX аудитін аяқтау.',
+    leg_signed:'Қол қойылды', leg_comton:'Comton Industriale – Ұсыныс',
+    leg_comton_text:'Solar Evo 5 желісін монтажбен, оператор оқытумен және кепілдікпен бірге жеткізуге арналған ұсыныс. Бағасы ~1 млн EUR, тапсырыстан 6 ай ішінде жеткізіледі.',
+    leg_prep:'Дайындалуда', leg_jv:'БК Шарты – Бөлімше',
+    leg_jv_text:'Инвестор мен ROOMS MANAGEMENT s.r.o. арасындағы бірлескен кәсіпорын шарты. Франчайзинг моделі 50/50. Операцияларды RM басқарады, инвестор пассивті рөлде.',
+    leg_prep2:'Дайындалатын', leg_docs_title:'Жүктеу үшін құжаттар',
+    leg_docs_sub:'NDA қол қойылғаннан кейін шарттар мен заңдық құжаттар қолжетімді болады',
+    footer_conf:'Құпия · Тек уәкілетті тұлғалар үшін',
+  }
+};
+
+let currentLang = 'cs';
+
+function applyLang(lang) {
+  currentLang = lang;
+  const t = T[lang];
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const key = el.getAttribute('data-i');
+    if (t[key]) el.textContent = t[key];
+  });
+  // login screen specific ids
+  const ids = ['lt','ls','lb','le','lf','hbrand','logoutbtn'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && t[id]) el.textContent = t[id];
+  });
+  document.getElementById('ll-email').textContent = t.ll_email;
+  document.getElementById('ll-pass').textContent = t.ll_pass;
+  // Tab buttons
+  ['tech','biz','cert','legal'].forEach(k => {
+    const btn = document.getElementById('tab-' + k);
+    if (btn && t['tab_' + k]) btn.textContent = t['tab_' + k];
+  });
+  // Lang buttons
+  ['cs','en','kk'].forEach(l => {
+    const btn = document.getElementById('btn-' + l);
+    if (btn) btn.classList.toggle('active', l === lang);
+  });
+  localStorage.setItem('portal_lang', lang);
+}
+
+function setLang(lang) { applyLang(lang); }
+
+// ── AUTH ────────────────────────────────────────────────────────────
+function doLogin() {
+  const email = document.getElementById('inp-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('inp-pass').value;
+  const err   = document.getElementById('login-err');
+  if (USERS[email] && USERS[email] === pass) {
+    err.style.display = 'none';
+    sessionStorage.setItem('portal_user', email);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('user-tag').textContent = email;
+  } else {
+    err.style.display = 'block';
+    err.textContent = T[currentLang].le;
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('portal_user');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('inp-pass').value = '';
+}
+
+// ── TABS ────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name + '-content').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ── INIT ────────────────────────────────────────────────────────────
+(function() {
+  const savedLang = localStorage.getItem('portal_lang') || 'cs';
+  applyLang(savedLang);
+  // Check session
+  const user = sessionStorage.getItem('portal_user');
+  if (user && USERS[user]) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('user-tag').textContent = user;
+  }
+})();
+</script>
+</body>
+</html>
