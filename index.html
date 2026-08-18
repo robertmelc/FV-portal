@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="cs" data-lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Evo 5 · Investor Portal · ROOMS MANAGEMENT</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080c14; --surface:#0e1520; --surface2:#151e2e;
+  --border:#1e2d42; --accent:#f0b429; --accent2:#00c9a7;
+  --text:#d0dcea; --dim:#4a6080; --red:#e05252; --white:#fff;
+  --mono:'JetBrains Mono',monospace; --sans:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:8px;padding:48px 40px;width:420px;max-width:95vw;}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+.login-sun{width:44px;height:44px;background:rgba(240,180,41,0.12);border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.login-brand{font-family:var(--mono);font-size:13px;}
+.login-brand strong{color:var(--accent);display:block;font-size:15px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:11px;font-family:var(--mono);color:var(--dim);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:13px;padding:10px 14px;border-radius:4px;outline:none;transition:border-color .2s;}
+.field input:focus{border-color:var(--accent);}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#000;font-family:var(--sans);font-weight:700;font-size:14px;border:none;border-radius:4px;cursor:pointer;margin-top:8px;}
+.login-err{font-family:var(--mono);font-size:11px;color:var(--red);margin-top:10px;display:none;text-align:center;}
+.login-footer{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;margin-top:24px;}
+
+/* APP */
+#app{display:none;min-height:100vh;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(8,12,20,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.h-left{display:flex;align-items:center;gap:14px;}
+.h-sun{width:34px;height:34px;background:rgba(240,180,41,0.1);border:1px solid rgba(240,180,41,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.h-title{font-family:var(--mono);font-size:12px;color:var(--dim);}
+.h-title strong{color:var(--accent);}
+.h-right{display:flex;align-items:center;gap:8px;}
+.lang-btn{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:3px 8px;background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:3px;cursor:pointer;transition:all .2s;}
+.lang-btn.active{border-color:var(--accent);color:var(--accent);}
+.logout-btn{font-family:var(--mono);font-size:10px;padding:3px 8px;background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:3px;cursor:pointer;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.user-tag{font-family:var(--mono);font-size:9px;color:var(--dim);}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;gap:2px;overflow-x:auto;}
+.tab-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.5px;padding:13px 16px;background:transparent;border:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* CONTENT */
+main{max-width:1060px;margin:0 auto;padding:36px 28px 60px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ── OVERVIEW (HOMEPAGE) ── */
+.hero{border-bottom:1px solid var(--border);padding-bottom:36px;margin-bottom:40px;}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:10px;text-transform:uppercase;}
+.hero-title{font-size:38px;font-weight:700;color:var(--white);line-height:1.15;margin-bottom:8px;}
+.hero-sub{font-size:14px;color:var(--dim);margin-bottom:28px;font-family:var(--mono);}
+.hero-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.hm{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center;}
+.hm-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--accent);margin-bottom:4px;}
+.hm-val.teal{color:var(--accent2);}
+.hm-val.silver{color:#b0c0d0;}
+.hm-label{font-size:11px;color:var(--dim);}
+
+.section{margin-bottom:44px;}
+.sec-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;}
+.sec-title{font-size:22px;font-weight:700;color:var(--white);margin-bottom:16px;}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:20px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px;transition:border-color .2s;}
+.card:hover{border-color:rgba(240,180,41,0.3);}
+.card-icon{font-size:26px;margin-bottom:8px;}
+.card-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:5px;}
+.card-desc{font-size:12px;color:var(--dim);line-height:1.7;}
+.card-tag{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:2px;background:rgba(240,180,41,0.1);color:var(--accent);}
+.card-tag.green{background:rgba(0,201,167,0.1);color:var(--accent2);}
+.card-tag.dim{background:rgba(74,96,128,0.2);color:var(--dim);}
+
+/* Spec table */
+.spec-table{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:20px;}
+.spec-row{display:flex;border-bottom:1px solid var(--border);}
+.spec-row:last-child{border-bottom:none;}
+.spec-label{width:200px;padding:11px 14px;font-family:var(--mono);font-size:11px;color:var(--dim);background:var(--surface2);flex-shrink:0;}
+.spec-val{padding:11px 14px;font-size:13px;color:var(--text);flex:1;}
+.spec-val.gold{color:var(--accent);font-weight:600;font-family:var(--mono);}
+.spec-section{background:var(--surface2);padding:8px 14px;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--accent);border-bottom:1px solid var(--border);}
+.spec-section.red{color:var(--red);}
+.spec-profit{display:flex;justify-content:space-between;align-items:center;padding:14px;background:rgba(240,180,41,0.07);border-top:2px solid var(--accent);}
+.spec-profit-label{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600;}
+.spec-profit-val{font-family:var(--mono);font-size:22px;color:var(--accent);font-weight:700;}
+
+/* Tech image */
+.tech-img{width:100%;border-radius:6px;border:1px solid var(--border);display:block;margin-bottom:10px;}
+.img-cap{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;margin-bottom:16px;}
+
+/* Video link */
+.video-link{display:flex;align-items:center;gap:10px;background:rgba(0,201,167,0.07);border:1px solid rgba(0,201,167,0.25);border-radius:4px;padding:11px 14px;text-decoration:none;margin-bottom:18px;transition:all .2s;}
+.video-link:hover{background:rgba(0,201,167,0.13);}
+.vl-label{font-size:12px;color:var(--accent2);font-weight:600;}
+.vl-url{font-family:var(--mono);font-size:10px;color:var(--dim);}
+
+/* Document list */
+.doclist{display:flex;flex-direction:column;gap:8px;margin-top:18px;}
+.doclist-head{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:2px;}
+.docitem{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;text-decoration:none;transition:all .2s;}
+.docitem:hover{border-color:rgba(240,180,41,0.45);background:var(--surface2);}
+.doc-ico{font-size:20px;flex-shrink:0;}
+.doc-body{flex:1;min-width:0;}
+.doc-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px;}
+.doc-meta{font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.5;}
+.doc-dl{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--accent);border:1px solid rgba(240,180,41,0.35);border-radius:3px;padding:4px 9px;flex-shrink:0;}
+.docitem:hover .doc-dl{background:rgba(240,180,41,0.12);}
+.doc-note{font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.7;margin-top:14px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:4px;}
+
+/* ══ Silver Monitor mockup ══ */
+.mock-wrap{--sm-bg:#070c0f;--sm-panel:#0a1114;--sm-line:#17302a;--sm-teal:#3ee0a0;--sm-dim:#5f7a72;--sm-txt:#b9cdc6;
+  position:relative;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--sm-bg);margin-bottom:18px;}
+.mock-badge{position:absolute;top:52px;right:12px;z-index:6;font-family:var(--mono);font-size:8px;letter-spacing:2px;padding:4px 9px;border-radius:3px;background:rgba(224,82,82,0.18);border:1px solid rgba(224,82,82,0.55);color:#ff8f8f;pointer-events:none;}
+.mock-chrome{display:flex;align-items:center;gap:7px;padding:9px 13px;background:#0b1216;border-bottom:1px solid var(--sm-line);}
+.mock-dot{width:9px;height:9px;border-radius:50%;}
+.mock-url{flex:1;margin-left:10px;font-family:var(--mono);font-size:10px;color:var(--sm-dim);background:var(--sm-bg);border:1px solid var(--sm-line);border-radius:11px;padding:3px 11px;text-align:center;}
+.mock-app{position:relative;background-image:linear-gradient(rgba(62,224,160,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(62,224,160,0.035) 1px,transparent 1px);background-size:44px 44px;}
+.mock-top{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--sm-line);}
+.mock-logo{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--sm-txt);letter-spacing:1px;}
+.mock-logo span{color:var(--sm-teal);}
+.mock-user{font-family:var(--mono);font-size:9px;color:var(--sm-dim);letter-spacing:1px;}
+.mock-hero{margin:16px 18px 0;border:1px solid var(--sm-teal);border-radius:6px;padding:12px 15px;box-shadow:0 0 18px rgba(62,224,160,0.13),inset 0 0 22px rgba(62,224,160,0.05);}
+.mock-hero-l{font-family:var(--mono);font-size:8px;letter-spacing:2.5px;color:var(--sm-dim);margin-bottom:6px;}
+.mock-hero-v{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--sm-teal);}
+.mock-hero-s{font-family:var(--mono);font-size:10px;color:var(--sm-dim);margin-top:3px;}
+.mock-nav{display:flex;flex-wrap:wrap;gap:9px;padding:16px 18px 4px;}
+.mock-tab{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;padding:10px 17px;background:transparent;border:1px solid var(--sm-line);border-radius:4px;color:var(--sm-dim);cursor:pointer;white-space:nowrap;transition:all .18s;text-transform:uppercase;}
+.mock-tab:hover{border-color:rgba(62,224,160,0.4);color:var(--sm-txt);}
+.mock-tab.on{border-color:var(--sm-teal);color:var(--sm-teal);background:rgba(62,224,160,0.07);box-shadow:0 0 12px rgba(62,224,160,0.16);}
+.mock-body{padding:8px 18px 20px;min-height:340px;}
+.mock-pane{display:none;}
+.mock-pane.on{display:block;}
+.mock-h{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:13px;letter-spacing:4px;color:#4a615b;margin:20px 0 12px;text-transform:uppercase;}
+.mock-h::after{content:"";flex:1;height:1px;background:var(--sm-line);}
+.mock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:6px;}
+.mock-kpi{background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;padding:12px 13px;}
+.mock-kpi-l{font-family:var(--mono);font-size:8px;letter-spacing:1.8px;color:var(--sm-dim);margin-bottom:6px;text-transform:uppercase;}
+.mock-kpi-v{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--sm-txt);}
+.mock-kpi-v.up{color:var(--sm-teal);}.mock-kpi-v.dn{color:#e8706e;}.mock-kpi-v.gold{color:#e0b53e;}
+.mock-kpi-s{font-family:var(--mono);font-size:9px;color:var(--sm-dim);margin-top:4px;}
+.mock-panel{background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;padding:14px;margin-bottom:10px;}
+.mock-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(23,48,42,0.7);}
+.mock-row:last-child{border-bottom:none;}
+.mock-row .k{color:var(--sm-dim);font-size:11px;}
+.mock-row .v{font-family:var(--mono);color:var(--sm-txt);font-size:11px;text-align:right;}
+.mock-pill{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:1.5px;padding:3px 8px;border-radius:3px;border:1px solid;}
+.mock-pill.buy{background:rgba(62,224,160,0.1);color:var(--sm-teal);border-color:rgba(62,224,160,0.45);}
+.mock-pill.hold{background:rgba(224,181,62,0.1);color:#e0b53e;border-color:rgba(224,181,62,0.45);}
+.mock-pill.sell{background:rgba(232,112,110,0.1);color:#e8706e;border-color:rgba(232,112,110,0.45);}
+.mock-bar{height:6px;border-radius:3px;background:#132320;overflow:hidden;margin-top:8px;}
+.mock-bar i{display:block;height:100%;border-radius:3px;background:var(--sm-teal);}
+.mock-split{display:flex;height:32px;border-radius:4px;overflow:hidden;margin:12px 0 8px;font-family:var(--mono);font-size:9px;letter-spacing:1px;}
+.mock-split div{display:flex;align-items:center;justify-content:center;color:#04120d;font-weight:700;}
+.mock-spark{display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:10px;}
+.mock-spark i{flex:1;border-radius:1px 1px 0 0;background:linear-gradient(180deg,var(--sm-teal) 0%,rgba(62,224,160,0.15) 100%);}
+.mock-spark i.d{background:linear-gradient(180deg,#e8706e 0%,rgba(232,112,110,0.15) 100%);}
+.mock-tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;}
+.mock-tbl th{text-align:left;color:var(--sm-dim);font-weight:400;padding:7px 8px;border-bottom:1px solid var(--sm-line);letter-spacing:1.5px;font-size:8px;text-transform:uppercase;}
+.mock-tbl td{padding:8px;border-bottom:1px solid rgba(23,48,42,0.6);color:var(--sm-txt);}
+.mock-tbl tr:last-child td{border-bottom:none;}
+.mock-tier{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.mock-tier-c{background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;padding:14px;}
+.mock-tier-c.hi{border-color:var(--sm-teal);box-shadow:0 0 14px rgba(62,224,160,0.14);}
+.mock-tier-n{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--sm-teal);margin-bottom:8px;}
+.mock-tier-p{font-family:var(--mono);font-size:19px;color:var(--sm-txt);margin-bottom:10px;}
+.mock-tier-i{font-size:10px;color:var(--sm-dim);padding:4px 0;line-height:1.5;}
+
+/* rozšíření pro komplexní mockup */
+.sm-sub{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--sm-dim);margin-top:4px;}
+.sm-live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--sm-teal);}
+.sm-live i{width:7px;height:7px;border-radius:50%;background:var(--sm-teal);box-shadow:0 0 8px var(--sm-teal);}
+.sm-rec{border:1px solid var(--sm-teal);border-radius:6px;padding:16px 18px;margin:14px 0 10px;box-shadow:0 0 20px rgba(62,224,160,0.15),inset 0 0 26px rgba(62,224,160,0.05);display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+.sm-rec-l{font-family:var(--mono);font-size:8px;letter-spacing:2.5px;color:var(--sm-dim);margin-bottom:6px;}
+.sm-rec-v{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--sm-teal);letter-spacing:1px;}
+.sm-rec-s{font-family:var(--mono);font-size:10px;color:var(--sm-dim);margin-top:6px;}
+.sm-alloc{min-width:170px;text-align:right;}
+.sm-alloc-v{font-family:var(--mono);font-size:15px;color:var(--sm-txt);}
+.sm-alloc-b{height:7px;border-radius:4px;overflow:hidden;display:flex;margin-top:7px;}
+.sm-strip{display:flex;flex-wrap:wrap;gap:0;background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;overflow:hidden;margin-bottom:10px;}
+.sm-strip div{flex:1;min-width:110px;padding:11px 13px;border-right:1px solid var(--sm-line);}
+.sm-strip div:last-child{border-right:none;}
+.sm-strip b{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--sm-dim);font-weight:400;margin-bottom:5px;}
+.sm-strip span{font-family:var(--mono);font-size:13px;color:#e0b53e;}
+.sm-sig{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;}
+.sm-sc{background:var(--sm-panel);border:1px solid var(--sm-line);border-top:2px solid var(--sm-teal);border-radius:5px;padding:12px;}
+.sm-sc.bear{border-top-color:#e8706e;}
+.sm-sc-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;}
+.sm-sc-n{font-size:11px;color:var(--sm-txt);font-weight:600;}
+.sm-sc-t{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--sm-teal);}
+.sm-sc-t.bear{color:#e8706e;}
+.sm-sc-v{font-family:var(--mono);font-size:16px;color:var(--sm-txt);}
+.sm-sc-v small{font-size:9px;color:var(--sm-dim);}
+.sm-sc-d{font-family:var(--mono);font-size:9px;color:#e0b53e;margin-top:3px;line-height:1.5;}
+.sm-sc-x{font-size:10px;color:var(--sm-dim);margin-top:8px;line-height:1.6;}
+.sm-scale{height:9px;border-radius:5px;background:linear-gradient(90deg,#3ee0a0 0%,#8fd97a 30%,#e0b53e 62%,#e8706e 100%);margin:10px 0 6px;}
+.sm-scale-l{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--sm-dim);}
+.sm-scale-l b{color:#e0b53e;font-weight:400;}
+.sm-param{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-top:10px;}
+.sm-pp{background:#0d1618;border:1px solid var(--sm-line);border-top:2px solid var(--sm-teal);border-radius:4px;padding:9px 11px;}
+.sm-pp.r{border-top-color:#e8706e;}.sm-pp.y{border-top-color:#e0b53e;}
+.sm-pp b{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--sm-dim);font-weight:400;margin-bottom:5px;}
+.sm-pp span{font-family:var(--mono);font-size:13px;color:var(--sm-txt);}
+.sm-warn{font-family:var(--mono);font-size:9px;color:#e0b53e;margin-top:10px;line-height:1.6;}
+.sm-tl{background:var(--sm-panel);border:1px solid var(--sm-line);border-left:3px solid var(--sm-teal);border-radius:5px;padding:12px 14px;margin-bottom:8px;}
+.sm-tl.y{border-left-color:#e0b53e;}.sm-tl.r{border-left-color:#e8706e;}.sm-tl.b{border-left-color:#5b9bd5;}
+.sm-tl-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:5px;}
+.sm-tl-n{font-size:11px;color:var(--sm-txt);font-weight:600;}
+.sm-tl-m{font-family:var(--mono);font-size:9px;color:var(--sm-dim);text-align:right;}
+.sm-tl-m b{display:block;color:#e0b53e;font-weight:400;margin-top:3px;}
+.sm-tl-r{font-family:var(--mono);font-size:10px;color:var(--sm-dim);margin:5px 0;}
+.sm-tl-x{font-size:10px;color:var(--sm-dim);line-height:1.65;}
+.sm-prod{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px;}
+.sm-pr{background:var(--sm-panel);border:1px solid var(--sm-line);border-left:3px solid var(--sm-teal);border-radius:5px;padding:12px;}
+.sm-pr-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;}
+.sm-pr-n{font-size:12px;color:var(--sm-txt);font-weight:600;}
+.sm-pr-v{font-family:var(--mono);font-size:12px;color:var(--sm-txt);text-align:right;}
+.sm-pr-v small{display:block;font-size:9px;color:var(--sm-dim);}
+.sm-pr-x{font-size:10px;color:var(--sm-dim);line-height:1.65;margin-top:7px;}
+.sm-dem{margin-bottom:12px;}
+.sm-dem-h{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--sm-txt);margin-bottom:5px;}
+.sm-dem-h b{font-family:var(--mono);color:var(--sm-dim);font-weight:400;font-size:10px;}
+.sm-dem-x{font-family:var(--mono);font-size:9px;color:var(--sm-dim);margin-top:4px;line-height:1.5;}
+.sm-two{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.sm-two>div{background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;padding:12px;}
+.sm-two .up{border-left:2px solid var(--sm-teal);}
+.sm-two .dn{border-left:2px solid #e8706e;}
+.sm-two h5{font-family:var(--mono);font-size:10px;letter-spacing:1px;margin-bottom:8px;color:var(--sm-teal);}
+.sm-two .dn h5{color:#e8706e;}
+.sm-two p{font-size:10px;color:var(--sm-dim);line-height:1.75;margin:0;}
+.sm-gauge{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.sm-gauge-v{font-family:var(--mono);font-size:30px;color:#e0b53e;}
+.sm-gauge-v small{display:block;font-size:9px;letter-spacing:1.5px;color:var(--sm-dim);}
+.sm-gauge-l{flex:1;min-width:200px;font-family:var(--mono);font-size:9px;color:var(--sm-dim);line-height:2;}
+.sm-btn{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;padding:7px 13px;border:1px solid var(--sm-teal);border-radius:4px;color:var(--sm-teal);background:rgba(62,224,160,0.07);}
+.sm-tf{display:flex;gap:5px;align-items:center;padding:8px 10px;background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;margin-bottom:8px;flex-wrap:wrap;}
+.sm-tf span{font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;color:var(--sm-dim);border:1px solid transparent;}
+.sm-tf span.on{background:#152a26;color:var(--sm-txt);border-color:var(--sm-line);}
+
+/* EU Solar Recyklace – druhý nástroj */
+.eu-rank{background:var(--sm-panel);border:1px solid var(--sm-line);border-radius:5px;overflow:hidden;}
+.eu-rank div{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid rgba(23,48,42,0.6);font-size:11px;}
+.eu-rank div:last-child{border-bottom:none;}
+.eu-rank i{font-family:var(--mono);font-size:9px;color:var(--sm-dim);width:16px;font-style:normal;}
+.eu-rank b{flex:1;color:var(--sm-txt);font-weight:600;}
+.eu-rank s{font-family:var(--mono);color:var(--sm-txt);text-decoration:none;font-size:11px;min-width:52px;text-align:right;}
+.eu-rank u{flex:1.4;height:4px;background:#132320;border-radius:2px;text-decoration:none;overflow:hidden;}
+.eu-rank u em{display:block;height:100%;background:var(--sm-teal);border-radius:2px;}
+.eu-part{background:var(--sm-panel);border:1px solid var(--sm-line);border-left:3px solid var(--sm-teal);border-radius:5px;padding:12px;}
+.eu-part.ag{border-left-color:#5b9bd5;}
+.eu-part.net{border-left-color:#e0b53e;}
+.eu-part-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.eu-part-n{font-size:12px;color:var(--sm-txt);font-weight:600;}
+.eu-part-c{font-family:var(--mono);font-size:9px;color:var(--sm-dim);}
+.eu-part-r{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--sm-teal);margin-bottom:6px;}
+.eu-part.ag .eu-part-r{color:#5b9bd5;}.eu-part.net .eu-part-r{color:#e0b53e;}
+.eu-part-x{font-size:10px;color:var(--sm-dim);line-height:1.65;}
+.eu-part-s{font-family:var(--mono);font-size:9px;color:#e0b53e;margin-top:6px;}
+.eu-chart{display:flex;align-items:flex-end;gap:5px;height:150px;margin:10px 0 4px;}
+.eu-chart>div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:0;}
+.eu-chart span{display:block;border-radius:1px 1px 0 0;}
+.eu-chart .nw{background:#2d5a8c;}
+.eu-chart .ag{background:var(--sm-teal);}
+.eu-years{display:flex;gap:5px;font-family:var(--mono);font-size:8px;color:var(--sm-dim);}
+.eu-years div{flex:1;text-align:center;}
+.eu-leg{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:9px;color:var(--sm-dim);margin-top:8px;}
+.eu-leg span::before{content:"▬ ";}
+.eu-tog{display:flex;gap:8px;justify-content:flex-end;margin-bottom:8px;}
+.eu-tog span{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;padding:6px 12px;border:1px solid var(--sm-line);border-radius:4px;color:var(--sm-dim);}
+.eu-tog span.on{border-color:var(--sm-teal);color:var(--sm-teal);background:rgba(62,224,160,0.07);}
+@media(max-width:640px){.sm-two{grid-template-columns:1fr;}.sm-rec-v{font-size:19px;}.sm-strip div{min-width:50%;}}
+@media(max-width:640px){.mock-body{padding:6px 12px 16px;}.mock-nav{padding:12px 12px 4px;gap:6px;}.mock-tab{font-size:9px;letter-spacing:1.5px;padding:8px 11px;}.mock-kpi-v{font-size:14px;}.mock-url{display:none;}.mock-h{font-size:11px;letter-spacing:2.5px;}.mock-hero{margin:12px;}}
+@media(max-width:640px){.doc-dl{display:none;}}
+
+/* 50/50 box */
+.jv-box{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:20px;}
+.jv-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px;}
+.jv-card.left{border-top:3px solid var(--accent);}
+.jv-card.right{border-top:3px solid var(--accent2);}
+.jv-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);margin-bottom:8px;}
+.jv-amount{font-family:var(--mono);font-size:24px;color:var(--accent);font-weight:700;margin-bottom:4px;}
+.jv-amount.teal{color:var(--accent2);}
+.jv-desc{font-size:11px;color:var(--dim);line-height:1.6;}
+.jv-item{font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);}
+.jv-item:last-child{border:none;}
+.jv-divider{text-align:center;font-family:var(--mono);font-size:28px;color:var(--dim);}
+.jv-divider span{display:block;font-size:11px;color:var(--dim);margin-top:4px;}
+
+/* Advantages grid */
+.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.adv{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:14px 16px;}
+.adv.teal{border-left-color:var(--accent2);}
+.adv-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.adv-desc{font-size:11px;color:var(--dim);line-height:1.6;}
+
+/* Divider */
+hr.div{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+/* Coming soon */
+.coming-soon{text-align:center;padding:60px 20px;border:1px dashed var(--border);border-radius:6px;margin-top:16px;}
+.coming-soon .icon{font-size:40px;margin-bottom:12px;}
+.coming-soon h3{color:var(--text);font-size:16px;margin-bottom:6px;}
+.coming-soon p{color:var(--dim);font-size:12px;font-family:var(--mono);}
+
+/* Infobox */
+.infobox{background:rgba(0,201,167,0.06);border:1px solid rgba(0,201,167,0.2);border-radius:4px;padding:14px 16px;margin-bottom:18px;}
+.infobox-label{font-family:var(--mono);font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:6px;}
+.infobox-text{font-size:12px;color:var(--dim);line-height:1.7;}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:14px 28px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);}
+
+@media(max-width:640px){
+  .hero-metrics{grid-template-columns:1fr 1fr;}
+  .adv-grid{grid-template-columns:1fr;}
+  .jv-box{grid-template-columns:1fr;gap:8px;}
+  .jv-divider{font-size:18px;}
+  .spec-label{width:120px;}
+  header{padding:0 14px;}
+  main{padding:20px 14px 40px;}
+  nav{padding:0 14px;}
+  .hero-title{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-sun">☀️</div>
+      <div class="login-brand">
+        <strong>ROOMS MANAGEMENT</strong>
+        Investor Portal · Solar Evo 5
+      </div>
+    </div>
+    <div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:6px;" id="lt">Přihlášení</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:24px;font-family:var(--mono);" id="ls">Zadejte přihlašovací údaje pro přístup k dokumentaci</div>
+    <div class="field"><label id="ll-email">E-MAIL</label><input type="email" id="inp-email" placeholder="vas@email.com" autocomplete="email"></div>
+    <div class="field"><label id="ll-pass">HESLO</label><input type="password" id="inp-pass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doLogin()"></div>
+    <button class="login-btn" onclick="doLogin()" id="lb">Přihlásit se →</button>
+    <div class="login-err" id="login-err">Nesprávný e-mail nebo heslo.</div>
+    <div class="login-footer" id="lf">ROOMS MANAGEMENT s.r.o. · Přístup pouze pro autorizované osoby</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="h-left">
+      <div class="h-sun">☀</div>
+      <div class="h-title"><strong>Solar Evo 5</strong> · <span id="hbrand">Investor Portal</span></div>
+    </div>
+    <div class="h-right">
+      <span class="user-tag" id="user-tag"></span>
+      <button class="lang-btn active" onclick="setLang('cs')" id="btn-cs">CZ</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      <button class="lang-btn" onclick="setLang('kk')" id="btn-kk">ҚАЗ</button>
+      <button class="logout-btn" onclick="doLogout()" id="logoutbtn">Odhlásit</button>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab-btn active" onclick="switchTab('overview')" id="tab-overview">☀ Přehled</button>
+    <button class="tab-btn" onclick="switchTab('tech')" id="tab-tech">A · Dokumentace Technologie</button>
+    <button class="tab-btn" onclick="switchTab('biz')" id="tab-biz">B · Business Case</button>
+    <button class="tab-btn" onclick="switchTab('cert')" id="tab-cert">C · Certifikační laboratoř</button>
+    <button class="tab-btn" onclick="switchTab('legal')" id="tab-legal">D · Smluvní dokumentace</button>
+    <button class="tab-btn" onclick="switchTab('silver')" id="tab-silver">E · Silver Monitor</button>
+  </nav>
+
+  <main>
+
+    <!-- ══ PŘEHLED ══════════════════════════════════════════════════ -->
+    <div class="tab-content active" id="tab-overview-content">
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-eyebrow" data-i="hero_eyebrow">ROOMS MANAGEMENT s.r.o. · Most-Rudolice · Česká republika</div>
+        <div class="hero-title" data-i="hero_title">Recyklace fotovoltaických panelů</div>
+        <div class="hero-sub" data-i="hero_sub">Comton Industriale · Solar Evo 5 · Investiční příležitost · ~1 mil. EUR</div>
+        <div class="hero-metrics">
+          <div class="hm"><div class="hm-val">~1 mil. EUR</div><div class="hm-label" data-i="hm_inv">Celková investice</div></div>
+          <div class="hm"><div class="hm-val teal">+31 379 Kč</div><div class="hm-label" data-i="hm_hr">Zisk / hodinu</div></div>
+          <div class="hm"><div class="hm-val">122,6 mil.</div><div class="hm-label" data-i="hm_ebitda">EBITDA / rok (Kč)</div></div>
+          <div class="hm"><div class="hm-val silver">~6 měs.</div><div class="hm-label" data-i="hm_roi">Návratnost</div></div>
+        </div>
+      </div>
+
+      <!-- Manažerské shrnutí -->
+      <div class="section">
+        <div class="sec-tag" data-i="s1_tag">Manažerské shrnutí</div>
+        <div class="sec-title" data-i="s1_title">Solární panel = 5 cenných komodit + legislativní mandát</div>
+        <div class="cards">
+          <div class="card"><div class="card-icon">🌍</div><div class="card-title" data-i="c1a">WEEE direktiva</div><div class="card-desc" data-i="c1a_t">EU direktiva 2012/19/EU nařizuje sběr a recyklaci FV panelů. Kolektivní systém REsolar s.r.o. zajišťuje dodávku. Předsmlouva podepsána.</div><span class="card-tag green" data-i="c1a_tag">Garantovaný vstup</span></div>
+          <div class="card"><div class="card-icon">🥈</div><div class="card-title" data-i="c1b">Stříbro jako bonus</div><div class="card-desc" data-i="c1b_t">Každá tuna panelů obsahuje 0,70 kg stříbra v hodnotě 30 000 Kč. Při dvousměnném provozu 2 688 kg Ag ročně – rafinované, v kvalitě pro banky i průmysl.</div><span class="card-tag">2 688 kg Ag/rok</span></div>
+          <div class="card"><div class="card-icon">🔬</div><div class="card-title" data-i="c1c">Řízený řetězec zhodnocení</div><div class="card-desc" data-i="c1c_t">Mechanická delaminace na lince Solar Evo 5 → koncentrát Si/Ag → chemické oddělení u Auri Metal → načasování prodeje přes Silver Monitor. Tři články pod jednou koordinací.</div><span class="card-tag">RM jako operátor</span></div>
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <!-- Technologie -->
+      <div class="section">
+        <div class="sec-tag" data-i="s2_tag">Technologie</div>
+        <div class="sec-title" data-i="s2_title">Výrobní linka Solar Evo 5 · Comton Industriale</div>
+        <img src="https://raw.githubusercontent.com/robertmelc/FV-portal/main/solar_evo_5.png" class="tech-img" alt="Solar Evo 5">
+        <div class="img-cap" data-i="s2_img_cap">Comton Industriale – Solar Evo 5 · Průmyslová linka pro recyklaci fotovoltaických panelů · Itálie 🇮🇹</div>
+        <a href="https://www.youtube.com/watch?v=4qca8cObFF8&t=89s" target="_blank" class="video-link">
+          <span style="font-size:20px;">▶</span>
+          <div><div class="vl-label" data-i="s2_vid">Video – Solar Evo 5 v provozu</div><div class="vl-url">youtube.com/watch?v=4qca8cObFF8&t=89s</div></div>
+          <span style="color:var(--accent2);margin-left:auto;">↗</span>
+        </a>
+        <div class="spec-table">
+          <div class="spec-row"><div class="spec-label" data-i="sp_mfr">Výrobce</div><div class="spec-val"><strong>Comton Industriale</strong></div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_model">Model</div><div class="spec-val"><strong>Solar Evo 5</strong></div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_cap">Kapacita</div><div class="spec-val">1 t / hodinu (~50 panelů)</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_out">Výstupní komodity</div><div class="spec-val">Ag · Cu · Si · sklo · Al</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_price">Cena linky</div><div class="spec-val gold">~1 mil. EUR</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_del">Termín dodání</div><div class="spec-val gold">6 měsíců od objednávky</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_cert">Certifikace</div><div class="spec-val">WEEELABEX (probíhá)</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="sp_origin">Původ</div><div class="spec-val">Itálie 🇮🇹</div></div>
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <!-- Finanční model -->
+      <div class="section">
+        <div class="sec-tag" data-i="s3_tag">Finanční model</div>
+        <div class="sec-title" data-i="s3_title">1 tuna / hodinu · ~50 panelů</div>
+        <div class="spec-table">
+          <div class="spec-section" data-i="ft_rev">VÝNOSY / HODINU · 1 TUNA PANELŮ</div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_buy">Gate fee – příjem panelů</div><div class="spec-val">+2 500 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_al">Hliníkový rám (132 kg)</div><div class="spec-val">+2 640 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_glass">Sklo (627 kg)</div><div class="spec-val">+3 135 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_si">Křemík (126 kg)</div><div class="spec-val">+6 000 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_ag">Stříbro Ag (0,70 kg)</div><div class="spec-val" style="color:var(--accent);font-weight:600;">+30 000 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_cu">Měď / cín (9 kg)</div><div class="spec-val">+1 440 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_revtot"><strong>Výnosy celkem</strong></div><div class="spec-val"><strong>+45 715 Kč</strong></div></div>
+          <div class="spec-section red" data-i="ft_cost">NÁKLADY / HODINU</div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_staff">Zaměstnanci (13 os.)</div><div class="spec-val" style="color:var(--red)">−3 640 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_energy">Energie (172,5 kW)</div><div class="spec-val" style="color:var(--red)">−543 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_ref">Zpracování koncentrátu – Auri Metal (služba)</div><div class="spec-val" style="color:var(--red)">−8 000 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_mgmt">Management</div><div class="spec-val" style="color:var(--red)">−1 022 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_plast">Likvidace plastů (77 kg)</div><div class="spec-val" style="color:var(--red)">−231 Kč</div></div>
+          <div class="spec-row"><div class="spec-label" data-i="ft_other">Ostatní</div><div class="spec-val" style="color:var(--red)">−900 Kč</div></div>
+          <div class="spec-profit">
+            <span class="spec-profit-label" data-i="ft_profit">ZISK / HODINU</span>
+            <span class="spec-profit-val">+31 379 Kč</span>
+          </div>
+        </div>
+        <div class="cards">
+          <div class="card"><div class="card-icon">📅</div><div class="card-title" data-i="fp_hrs">Provozní hodiny / rok</div><div class="card-desc" data-i="fp_hrs_t">3 840 hodin · dvousměnný provoz Po–Pá · roční tržby 175,5 mil. Kč</div></div>
+          <div class="card"><div class="card-icon">🥈</div><div class="card-title" data-i="fp_ag">Stříbro ročně</div><div class="card-desc" data-i="fp_ag_t">2 688 kg Ag/rok · 115,2 mil. Kč ročně jen ze stříbra – 66 % tržeb</div></div>
+          <div class="card"><div class="card-icon">📈</div><div class="card-title">EBITDA</div><div class="card-desc" data-i="fp_ebitda">122,6 mil. Kč/rok · marže 70 % · čistý zisk po odpisech a dani 94,9 mil. Kč</div></div>
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <!-- Investiční nabídka -->
+      <div class="section">
+        <div class="sec-tag" data-i="s4_tag">Investiční nabídka</div>
+        <div class="sec-title" data-i="s4_title">Odštěpný závod · Franšízový model · 50 / 50</div>
+        <div class="jv-box">
+          <div class="jv-card left">
+            <div class="jv-label" data-i="jv_inv_label">FRANŠÍZANT VKLÁDÁ</div>
+            <div class="jv-amount">~1 mil. EUR</div>
+            <div class="jv-desc" data-i="jv_inv_desc">peněžitý vklad do odštěpného závodu</div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+            <div class="jv-item" data-i="jv_i1">✓ Výrobní hala · příprava prostor</div>
+            <div class="jv-item" data-i="jv_i2">✓ Linka Comton Industriale Solar Evo 5</div>
+            <div class="jv-item" data-i="jv_i3">✓ Provozní kapitál · spuštění</div>
+            <div class="jv-item" data-i="jv_i4">✓ Audit WEEELABEX · certifikace REsolar</div>
+          </div>
+          <div class="jv-divider">50<br><span>/</span><br>50</div>
+          <div class="jv-card right">
+            <div class="jv-label" data-i="jv_rm_label">ROOMS MANAGEMENT VKLÁDÁ</div>
+            <div class="jv-amount teal" data-i="jv_rm_amount">Know-How + Licence</div>
+            <div class="jv-desc" data-i="jv_rm_desc">nepeněžitý vklad — ocenění dle dohody</div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+            <div class="jv-item" data-i="jv_r1">✓ IČZ CZU01425 + IČZ CZA01672 · licence</div>
+            <div class="jv-item" data-i="jv_r2">✓ Technologický know-how · EVA recyklace</div>
+            <div class="jv-item" data-i="jv_r3">✓ Klíčoví zaměstnanci · management</div>
+            <div class="jv-item" data-i="jv_r4">✓ Smlouva REsolar s.r.o. · dodávka panelů</div>
+          </div>
+        </div>
+        <div style="background:rgba(240,180,41,0.06);border:1px solid rgba(240,180,41,0.2);border-radius:4px;padding:12px 16px;font-size:12px;color:var(--dim);font-family:var(--mono);" data-i="jv_footer">
+          Odštěpný závod RM · Franšízant 50 % zisku · RM 50 % zisku · Správa a provoz zajišťuje RM · Franšízant pasivní role · Model je replikovatelný – Most-Rudolice jako první závod
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <!-- Klíčové výhody -->
+      <div class="section">
+        <div class="sec-tag" data-i="s5_tag">Proč investovat</div>
+        <div class="sec-title" data-i="s5_title">Klíčové výhody projektu</div>
+        <div class="adv-grid">
+          <div class="adv"><div class="adv-title" data-i="adv1">⚡ Nízký CAPEX, rychlá návratnost</div><div class="adv-desc" data-i="adv1t">~1 mil. EUR · plný provoz do 12 měsíců · průmyslová linka Solar Evo 5 · minimální technologické riziko</div></div>
+          <div class="adv teal"><div class="adv-title" data-i="adv2">🥈 Stříbro jako prémiová komodita</div><div class="adv-desc" data-i="adv2t">0,70 kg Ag/t panelů · 30 000 Kč hodnoty · 2 688 kg Ag ročně · rafinované stříbro, ne šrot</div></div>
+          <div class="adv"><div class="adv-title" data-i="adv3">📋 Zákonný mandát – WEEE direktiva</div><div class="adv-desc" data-i="adv3t">EU nařizuje sběr a recyklaci FV panelů · REsolar zajišťuje dodávku · smlouva podepsána</div></div>
+          <div class="adv teal"><div class="adv-title" data-i="adv4">⚗ Silver Monitor – načasování prodeje</div><div class="adv-desc" data-i="adv4t">Vlastní SW vyhodnocuje, kdy stříbro uložit do banky a kdy prodat průmyslu s příplatkem – marže navíc bez dalšího CAPEX</div></div>
+          <div class="adv"><div class="adv-title" data-i="adv5">📈 Škálovatelnost</div><div class="adv-desc" data-i="adv5t">Modulární Solar Evo 5 → snadné navýšení kapacity · možnost druhé linky · prostor pro expanzi</div></div>
+          <div class="adv teal"><div class="adv-title" data-i="adv6">🌿 ESG + dotace</div><div class="adv-desc" data-i="adv6t">Cirkulární ekonomika · splňuje kritéria EU pro dotace · WEEELABEX certifikace · zelené financování</div></div>
+        </div>
+      </div>
+
+    </div><!-- end overview -->
+
+    <!-- ══ A: DOKUMENTACE TECHNOLOGIE ══════════════════════════════ -->
+    <div class="tab-content" id="tab-tech-content">
+      <div class="sec-tag" data-i="tag_a">A · DOKUMENTACE TECHNOLOGIE</div>
+      <div class="sec-title" data-i="title_a">Výrobní linka Solar Evo 5</div>
+      <img src="https://raw.githubusercontent.com/robertmelc/FV-portal/main/solar_evo_5.png" class="tech-img" alt="Solar Evo 5">
+      <div class="img-cap" data-i="img_cap">Comton Industriale – Solar Evo 5 · Průmyslová linka pro recyklaci fotovoltaických panelů</div>
+      <a href="https://www.youtube.com/watch?v=4qca8cObFF8&t=89s" target="_blank" class="video-link">
+        <span style="font-size:20px;">▶</span>
+        <div><div class="vl-label" data-i="vid_label">Video – Solar Evo 5 v provozu</div><div class="vl-url">youtube.com/watch?v=4qca8cObFF8&t=89s</div></div>
+        <span style="color:var(--accent2);margin-left:auto;">↗</span>
+      </a>
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="sp_mfr2">Výrobce</div><div class="spec-val"><strong>Comton Industriale</strong></div></div>
+        <div class="spec-row"><div class="spec-label">Model</div><div class="spec-val"><strong>Solar Evo 5</strong></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_cap2">Kapacita</div><div class="spec-val">1 t / hodinu (~50 panelů)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_out2">Výstupní komodity</div><div class="spec-val">Ag · Cu · Si · sklo · Al</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_price2">Cena linky</div><div class="spec-val gold">~1 mil. EUR</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_del2">Termín dodání</div><div class="spec-val gold">6 měsíců od objednávky</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_cert2">Certifikace</div><div class="spec-val">WEEELABEX (probíhá)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="sp_origin2">Původ</div><div class="spec-val">Itálie 🇮🇹</div></div>
+      </div>
+      <div class="infobox">
+        <div class="infobox-label" data-i="ib_proc">PROCES RECYKLACE</div>
+        <div class="infobox-text" data-i="ib_proc_text">Příjem a evidence panelů → Demontáž Al rámu a junction boxu → Řez panelu → Delaminace skla → Drcení a třídění na vibračním sítu → Výstupní frakce: sklo · plasty · koncentrát Si/Ag · Cu/Sn → Koncentrát Si/Ag postupuje k chemickému oddělení (Auri Metal)</div>
+      </div>
+      <div class="coming-soon"><div class="icon">📄</div><h3 data-i="a_docs">Technická dokumentace</h3><p data-i="a_docs_sub">Technické listy a specifikace Comton Industriale budou přidány</p></div>
+    </div>
+
+    <!-- ══ B: BUSINESS CASE ═════════════════════════════════════════ -->
+    <div class="tab-content" id="tab-biz-content">
+      <div class="sec-tag" data-i="tag_b">B · BUSINESS CASE</div>
+      <div class="sec-title" data-i="title_b">Finanční model provozu</div>
+      <div class="hero-metrics" style="margin-bottom:24px;">
+        <div class="hm"><div class="hm-val">~1 mil. EUR</div><div class="hm-label" data-i="bm_inv">Celková investice</div></div>
+        <div class="hm"><div class="hm-val teal">+31 379 Kč</div><div class="hm-label" data-i="bm_hr">Zisk / hodinu</div></div>
+        <div class="hm"><div class="hm-val">122,6 mil.</div><div class="hm-label" data-i="bm_ebitda">EBITDA / rok (Kč)</div></div>
+        <div class="hm"><div class="hm-val silver">6,2 měs.</div><div class="hm-label" data-i="bm_roi">Návratnost</div></div>
+      </div>
+
+      <div class="infobox">
+        <div class="infobox-label" data-i="b_base">VÝCHOZÍ PŘEDPOKLAD</div>
+        <div class="infobox-text" data-i="b_base_t">Dvousměnný provoz · pondělí–pátek · 2 × 8 hodin denně · 4 týdny v měsíci. Roční fond 3 840 provozních hodin (48 týdnů), 4 týdny rezerva na plánované odstávky, údržbu a dovolené. Zpracováno 3 840 t panelů ročně. Hmotnostní složení vstupu dle technické dokumentace Compton Industriale.</div>
+      </div>
+
+      <div class="sec-tag" data-i="b_chain_tag">1 · ŘETĚZEC ZHODNOCENÍ</div>
+      <div class="cards">
+        <div class="card"><div class="card-icon">⚙️</div><div class="card-title" data-i="b_ch1">Mechanická část – ROOMS MANAGEMENT</div><div class="card-desc" data-i="b_ch1_t">Linka Solar Evo 5 provádí demontáž, delaminaci skla a roztřídění na frakce. Výstupem je sklo, hliník, Cu/Sn, plasty a koncentrát Si/Ag.</div><span class="card-tag green" data-i="b_ch1_tag">Vlastní provoz</span></div>
+        <div class="card"><div class="card-icon">⚗️</div><div class="card-title" data-i="b_ch2">Chemická část – Auri Metal</div><div class="card-desc" data-i="b_ch2_t">Koncentrát Si/Ag se chemickou cestou nebo pyrolýzou rozdělí na křemík a rafinované stříbro v kvalitě pro bankovní i průmyslové využití. Auri Metal je placen za službu podle smluvní sazby – nemá podíl na výnosech ani na zisku, ten zůstává celý v odštěpném závodě.</div><span class="card-tag green" data-i="b_ch2_tag">Placená služba · LOI</span></div>
+        <div class="card"><div class="card-icon">📊</div><div class="card-title" data-i="b_ch3">Zhodnocení – Silver Monitor</div><div class="card-desc" data-i="b_ch3_t">Vlastní software vyhodnocuje trh a určuje, kdy rafinované stříbro uložit do banky a kdy je prodat průmyslu s příplatkem.</div><span class="card-tag" data-i="b_ch3_tag">Marže navíc</span></div>
+      </div>
+
+      <div class="sec-tag" data-i="b_cal_tag">2 · PROVOZNÍ KALENDÁŘ</div>
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="b_c1">Směnnost</div><div class="spec-val">2 směny × 8 h = 16 h / den</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_c2">Provozní dny</div><div class="spec-val">Po–Pá · 20 dní / měsíc</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_c3">Hodin ročně</div><div class="spec-val gold">3 840 h (48 týdnů)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_c5">Zpracovaná tonáž</div><div class="spec-val gold">320 t / měsíc · 3 840 t / rok</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_c7">Využití kapacity linky</div><div class="spec-val">1,0 t/h z 1,65 t/h max · rezerva 65 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_c6">Personál výroby</div><div class="spec-val">2 × 13 osob = 26 pracovníků</div></div>
+      </div>
+
+      <div class="sec-tag" data-i="b_feed_tag">3 · ZAJIŠTĚNÍ VSTUPNÍ SUROVINY</div>
+      <div class="hero-metrics" style="margin-bottom:16px;">
+        <div class="hm"><div class="hm-val">70 000 t</div><div class="hm-label" data-i="b_f1">Panelů k dispozici v ČR</div></div>
+        <div class="hm"><div class="hm-val teal">18,2 roku</div><div class="hm-label" data-i="b_f2">Provozu na plnou kapacitu</div></div>
+        <div class="hm"><div class="hm-val">49 t</div><div class="hm-label" data-i="b_f3">Obsaženého stříbra</div></div>
+        <div class="hm"><div class="hm-val silver">242 000 t</div><div class="hm-label" data-i="b_f4">Instalovaná báze ČR</div></div>
+      </div>
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="b_f5">Instalovaná báze ČR</div><div class="spec-val">~11 mil. panelů ≈ 242 000 t</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_f6">Aktuálně dostupné k recyklaci</div><div class="spec-val gold">70 000 t · 29 % instalované báze</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_f7">Zajištění toku</div><div class="spec-val">Smlouva s kolektivním systémem REsolar s.r.o.</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_f8">Roční spotřeba závodu</div><div class="spec-val">3 840 t · 5,5 % dostupného objemu</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_f9">Původ materiálu</div><div class="spec-val">Výměna technologie na provozovaných elektrárnách — nové panely o ~30 % výkonnější</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_f10">Stav zajištění</div><div class="spec-val gold">Materiál je fyzicky k dispozici · předsmlouva podepsána · závazná smlouva po certifikaci WEEELABEX</div></div>
+      </div>
+      <div class="infobox">
+        <div class="infobox-label" data-i="b_f_note_l">PROČ JE SUROVINY DOST</div>
+        <div class="infobox-text" data-i="b_f_note">Vstupní materiál nevzniká čekáním na konec životnosti panelů. Provozovatelé solárních elektráren vyměňují technologii za novou, zhruba o 30 % výkonnější — na stejné ploše, se stejným připojením a stejnými pozemky získají výrazně vyšší výnos, takže se výměna vyplatí dávno před dosloužením. Sejmuté panely proto existují fyzicky už dnes; nejde o projekci budoucího odpadu, ale o materiál, který je na trhu. Dostupných 70 000 tun pokrývá 18 let provozu na plnou kapacitu a závod z nich odebírá 5,5 % ročně. Závazná smlouva na jejich dodávku je podmíněna dokončením certifikace WEEELABEX — to je jediná otevřená podmínka mezi projektem a smluvně zajištěným vstupem.</div>
+      </div>
+
+      <div class="sec-tag" data-i="b_mat_tag">4 · HMOTNOSTNÍ BILANCE · 1 TUNA VSTUPU</div>
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="b_mt1">Sklo</div><div class="spec-val">627 kg · 62,7 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_mt2">Hliník (rám)</div><div class="spec-val">132 kg · 13,2 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_mt3">Koncentrát Si/Ag</div><div class="spec-val gold">127 kg · 12,7 % (z toho 0,70 kg Ag)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_mt4">Plasty (EVA, backsheet)</div><div class="spec-val">77 kg · 7,7 % – nákladová položka</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_mt5">Měď / cín, elektrodesky</div><div class="spec-val">14 kg · 1,4 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_mt6">Ztráty a prach</div><div class="spec-val">23 kg · 2,3 %</div></div>
+      </div>
+
+      <div class="sec-tag" data-i="b_rev_tag">5 · VÝNOSY</div>
+      <div class="spec-table">
+        <div class="spec-section" data-i="b_rev_h">STRUKTURA VÝNOSŮ · 3 840 t / ROK</div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r1">Gate fee – příjem panelů</div><div class="spec-val">2 500 Kč/t · <strong>9 600 000 Kč</strong> <span style="color:var(--dim)">(5,5 %)</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r2">Hliník · 132 kg × 20 Kč</div><div class="spec-val">2 640 Kč/t · <strong>10 137 600 Kč</strong> <span style="color:var(--dim)">(5,8 %)</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r3">Sklo · 627 kg × 5 Kč</div><div class="spec-val">3 135 Kč/t · <strong>12 038 400 Kč</strong> <span style="color:var(--dim)">(6,9 %)</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r4">Křemík · 126 kg</div><div class="spec-val">6 000 Kč/t · <strong>23 040 000 Kč</strong> <span style="color:var(--dim)">(13,1 %)</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r5">Stříbro · 0,70 kg rafinovaného Ag</div><div class="spec-val gold">30 000 Kč/t · <strong>115 200 000 Kč</strong> (65,6 %)</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_r6">Měď / cín · 9 kg × 160 Kč</div><div class="spec-val">1 440 Kč/t · <strong>5 529 600 Kč</strong> <span style="color:var(--dim)">(3,1 %)</span></div></div>
+        <div class="spec-profit">
+          <span class="spec-profit-label" data-i="b_rev_tot">CELKOVÉ TRŽBY / ROK</span>
+          <span class="spec-profit-val">175 545 600 Kč</span>
+        </div>
+      </div>
+
+      <div class="sec-tag" data-i="b_cost_tag">6 · NÁKLADY · ROZDĚLENÍ FIXNÍ / VARIABILNÍ</div>
+      <div class="spec-table">
+        <div class="spec-section red" data-i="b_var_h">VARIABILNÍ NÁKLADY (rostou s objemem)</div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n1">Mzdy výroby · 26 osob</div><div class="spec-val">3 640 Kč/h · <span style="color:var(--red)">13 977 600 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n2b">Zpracování koncentrátu – Auri Metal (služba)</div><div class="spec-val">8 000 Kč/h · <span style="color:var(--red)">30 720 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n2">Energie · 172,5 kW instalovaný příkon</div><div class="spec-val">543 Kč/h · <span style="color:var(--red)">2 085 120 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n3b">Likvidace plastových frakcí</div><div class="spec-val">231 Kč/h · <span style="color:var(--red)">887 040 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n3">Provozní materiál, náhradní díly</div><div class="spec-val">450 Kč/h · <span style="color:var(--red)">1 728 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n4"><strong>Variabilní celkem</strong></div><div class="spec-val"><strong>12 864 Kč/h · 49 397 760 Kč</strong></div></div>
+        <div class="spec-section red" data-i="b_fix_h">FIXNÍ NÁKLADY (nezávislé na objemu)</div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n5">Management</div><div class="spec-val"><span style="color:var(--red)">2 044 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n6">Směnový mistr 2. směny</div><div class="spec-val"><span style="color:var(--red)">600 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n7">Nájem, pojištění, administrativa</div><div class="spec-val"><span style="color:var(--red)">900 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_n8"><strong>Fixní celkem</strong></div><div class="spec-val"><strong>3 544 000 Kč</strong></div></div>
+        <div class="spec-profit">
+          <span class="spec-profit-label" data-i="b_cost_tot">NÁKLADY CELKEM / ROK</span>
+          <span class="spec-profit-val" style="color:var(--red)">52 941 760 Kč</span>
+        </div>
+      </div>
+
+      <div class="sec-tag" data-i="b_pl_tag">7 · VÝSLEDOVKA</div>
+      <div class="spec-table">
+        <div class="spec-row"><div class="spec-label" data-i="b_p1">Tržby</div><div class="spec-val">175 545 600 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p2">− Variabilní náklady</div><div class="spec-val"><span style="color:var(--red)">−49 397 760 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p3">= Krycí příspěvek</div><div class="spec-val">126 147 840 Kč · <strong>32 851 Kč/h</strong></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p4">− Fixní náklady</div><div class="spec-val"><span style="color:var(--red)">−3 544 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p5">= EBITDA</div><div class="spec-val gold">122 603 840 Kč · marže 69,8 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p6">− Odpisy linky (10 let)</div><div class="spec-val"><span style="color:var(--red)">−2 450 000 Kč</span></div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p7">= EBIT</div><div class="spec-val">120 153 840 Kč</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_p8">− Daň z příjmu 21 %</div><div class="spec-val"><span style="color:var(--red)">−25 232 306 Kč</span></div></div>
+        <div class="spec-profit">
+          <span class="spec-profit-label" data-i="b_p9">ČISTÝ ZISK / ROK</span>
+          <span class="spec-profit-val">94 921 534 Kč</span>
+        </div>
+      </div>
+
+      <div class="hero-metrics" style="margin-bottom:24px;">
+        <div class="hm"><div class="hm-val">10,22 mil.</div><div class="hm-label" data-i="b_m1">EBITDA / měsíc (Kč)</div></div>
+        <div class="hm"><div class="hm-val teal">47,46 mil.</div><div class="hm-label" data-i="b_m2">Podíl franšízanta 50 % (Kč/rok)</div></div>
+        <div class="hm"><div class="hm-val">6,2 měs.</div><div class="hm-label" data-i="b_m3">Návratnost z čistého zisku</div></div>
+        <div class="hm"><div class="hm-val silver">108 h</div><div class="hm-label" data-i="b_m4">Bod zvratu / rok</div></div>
+      </div>
+
+      <div class="sec-tag" data-i="b_sc_tag">8 · CITLIVOSTNÍ ANALÝZA</div>
+      <div class="spec-table">
+        <div class="spec-section" data-i="b_sc_h">SCÉNÁŘE PODLE VÝVOJE CEN KOMODIT</div>
+        <div class="spec-row"><div class="spec-label" data-i="b_s1">Konzervativní</div><div class="spec-val">Ag −30 % · sklo −60 % · Si −30 % → tržby 126,9 mil. · <strong>EBITDA 73,9 mil.</strong> · marže 58 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_s2">Základní</div><div class="spec-val gold">ceny dle modelu → tržby 175,5 mil. · <strong>EBITDA 122,6 mil.</strong> · marže 70 %</div></div>
+        <div class="spec-row"><div class="spec-label" data-i="b_s3">Optimistický</div><div class="spec-val">Ag +30 % · Si +30 % → tržby 217,0 mil. · <strong>EBITDA 164,1 mil.</strong> · marže 76 %</div></div>
+      </div>
+
+      <div class="infobox">
+        <div class="infobox-label" data-i="b_lev">PROVOZNÍ PÁKA</div>
+        <div class="infobox-text" data-i="b_lev_t">Podíl fixních nákladů činí 6,7 % celkových nákladů. Bod zvratu leží na 108 provozních hodinách ročně — 2,8 % plánované kapacity. Model je proto odolný vůči výpadku objemu, ale citlivý na cenu stříbra, které tvoří 65,6 % tržeb. Linka navíc běží na 61 % své maximální kapacity, což představuje rezervu pro navýšení objemu bez dodatečné investice.</div>
+      </div>
+
+      <div class="cards">
+        <div class="card"><div class="card-icon">⚠️</div><div class="card-title" data-i="b_k1">Koncentrace na stříbro</div><div class="card-desc" data-i="b_k1_t">Ag tvoří 65,6 % tržeb z 0,07 % hmotnosti vstupu. Pokles ceny o 30 % znamená −34,6 mil. Kč EBITDA ročně. Silver Monitor tuto expozici částečně řídí načasováním prodeje, plné zajištění vyžaduje forwardový kontrakt.</div><span class="card-tag" data-i="b_k1_tag">Klíčové riziko</span></div>
+        <div class="card"><div class="card-icon">🧪</div><div class="card-title" data-i="b_k2">Závislost na zpracovateli</div><div class="card-desc" data-i="b_k2_t">Chemické oddělení Ag zajišťuje externí dodavatel za smluvní cenu. Sazba 8 000 Kč/t je předpokladem k potvrzení smlouvou. Vlastní certifikovaná laboratoř je v přípravě a umožní nezávislou kontrolu obsahu Ag v každé šarži.</div><span class="card-tag dim" data-i="b_k2_tag">K dořešení</span></div>
+        <div class="card"><div class="card-icon">🛡️</div><div class="card-title" data-i="b_k3">Garantovaný vstup</div><div class="card-desc" data-i="b_k3_t">Gate fee 2 500 Kč/t je smluvní příjem od kolektivního systému, nikoli tržní cena. Spolu s WEEE direktivou tvoří protiváhu komoditnímu riziku na výnosové straně.</div><span class="card-tag green" data-i="b_k3_tag">Stabilizátor</span></div>
+      </div>
+
+      <div class="doc-note" data-i="b_note">Hmotnostní bilance vychází z technické dokumentace Compton Industriale (průměrný panel 22 kg, kapacita linky 75 panelů/h). Model počítá s konzervativním využitím 1 t/h. Sazba za rafinaci koncentrátu Si/Ag je předpokladem k potvrzení smlouvou s Auri Metal. Uvedené hodnoty nezahrnují pracovní kapitál a náběhovou fázi provozu. Ceny komodit k srpnu 2026.</div>
+    </div>
+
+    <!-- ══ C: CERTIFIKAČNÍ LABORATOŘ ════════════════════════════════ -->
+    <div class="tab-content" id="tab-cert-content">
+      <div class="sec-tag" data-i="tag_c">C · CERTIFIKAČNÍ LABORATOŘ</div>
+      <div class="sec-title" data-i="title_c">WEEELABEX Certifikace</div>
+      <div class="infobox">
+        <div class="infobox-label" data-i="cert_status">AKTUÁLNÍ STAV</div>
+        <div class="infobox-text" data-i="cert_status_text">Audit WEEELABEX Conformity & Verification je v průběhu. Certifikace je podmínkou pro uzavření finální smlouvy s kolektivním systémem REsolar s.r.o.</div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="card-icon">🔬</div><div class="card-title">WEEELABEX</div><div class="card-desc" data-i="cert_weee">Mezinárodní standard pro recyklaci elektrozařízení. Audit zahrnuje technologické procesy, výtěžnost materiálů a environmentální compliance.</div><span class="card-tag dim" data-i="cert_ongoing">Probíhá</span></div>
+        <div class="card"><div class="card-icon">📄</div><div class="card-title">REsolar s.r.o.</div><div class="card-desc" data-i="cert_resolar">Kolektivní systém WEEE pro FV panely. Smlouva o smlouvě budoucí podepsána. Finální smlouva po dokončení certifikace.</div><span class="card-tag green" data-i="cert_signed">Předsmlouva podepsána</span></div>
+        <div class="card"><div class="card-icon">🏛️</div><div class="card-title" data-i="cert_icz">IČZ Licence</div><div class="card-desc" data-i="cert_icz_text">IČZ CZU01425 – stacionární zařízení. IČZ CZA01672 – mobilní zpracování. Obě licence aktivní.</div><span class="card-tag green" data-i="cert_active">Aktivní</span></div>
+      </div>
+      <div class="infobox">
+        <div class="infobox-label" data-i="cert_lab">VLASTNÍ LABORATOŘ – ZÁMĚR</div>
+        <div class="infobox-text" data-i="cert_lab_t">Připravuje se zřízení vlastní certifikované laboratoře pro kontrolu obsahu a čistoty stříbra ve výstupním koncentrátu. Jednání s chemičkou se zkušeností z tohoto oboru probíhají. Vlastní laboratoř umožní nezávisle ověřovat obsah Ag v každé šarži a tím posílit vyjednávací pozici vůči rafinačnímu partnerovi.</div>
+      </div>
+      <div class="doc-note" data-i="cert_note">Certifikační dokumenty a protokoly z auditu WEEELABEX naleznete v záložce D.</div>
+    </div>
+
+    <!-- ══ D: SMLUVNÍ DOKUMENTACE ═══════════════════════════════════ -->
+    <div class="tab-content" id="tab-legal-content">
+      <div class="sec-tag" data-i="tag_d">D · SMLUVNÍ DOKUMENTACE</div>
+      <div class="sec-title" data-i="title_d">Smluvní zázemí projektu</div>
+      <div class="cards">
+        <div class="card"><div class="card-icon">📋</div><div class="card-title" data-i="leg_resolar">REsolar s.r.o. – Předsmlouva</div><div class="card-desc" data-i="leg_resolar_t">Smlouva o smlouvě budoucí na dodávku FV panelů. Podmínka: dokončení auditu WEEELABEX.</div><span class="card-tag green" data-i="leg_signed">Podepsána</span></div>
+        <div class="card"><div class="card-icon">🏭</div><div class="card-title" data-i="leg_comton">Comton Industriale – Nabídka</div><div class="card-desc" data-i="leg_comton_t">Nabídka Solar Evo 5 · instalace + školení + záruka · ~1 mil. EUR · 6 měsíců od objednávky.</div><span class="card-tag dim" data-i="leg_prep">V přípravě</span></div>
+        <div class="card"><div class="card-icon">🤝</div><div class="card-title" data-i="leg_jv">JV Smlouva – Odštěpný závod</div><div class="card-desc" data-i="leg_jv_t">Franšízová smlouva o odštěpném závodě. Model 50/50. Správa a provoz zajišťuje RM, franšízant pasivní role.</div><span class="card-tag dim" data-i="leg_prep2">K přípravě</span></div>
+      </div>
+      <div class="doclist">
+        <div class="doclist-head" data-i="leg_docs">Dokumenty ke stažení</div>
+
+        <a class="docitem" href="docs/EURO-Ekosfera_Trans_REsolar_LOI_11122025.pdf" target="_blank" rel="noopener">
+          <div class="doc-ico">📄</div>
+          <div class="doc-body">
+            <div class="doc-title" data-i="doc_resolar">LOI – REsolar s.r.o.</div>
+            <div class="doc-meta" data-i="doc_resolar_m">Vyjádření zájmu o budoucí spolupráci · kolektivní systém WEEE pro FV panely · 5. 12. 2025 · PDF</div>
+          </div>
+          <div class="doc-dl" data-i="dl">STÁHNOUT ↓</div>
+        </a>
+
+        <a class="docitem" href="docs/AuriMetal_LOI_12122025.pdf" target="_blank" rel="noopener">
+          <div class="doc-ico">📄</div>
+          <div class="doc-body">
+            <div class="doc-title" data-i="doc_auri">LOI – Auri Metal, s.r.o.</div>
+            <div class="doc-meta" data-i="doc_auri_m">Vyjádření zájmu o budoucí spolupráci · odbyt kovových frakcí · 10. 12. 2025 · PDF</div>
+          </div>
+          <div class="doc-dl" data-i="dl2">STÁHNOUT ↓</div>
+        </a>
+
+        <a class="docitem" href="docs/declaration_intent_25-0265_p.pdf" target="_blank" rel="noopener">
+          <div class="doc-ico">🔬</div>
+          <div class="doc-body">
+            <div class="doc-title" data-i="doc_doi">WEEELABEX – Declaration of Intent 25-0265</div>
+            <div class="doc-meta" data-i="doc_doi_m">Přihláška do certifikačního řízení · proces PV · kapacita 2 500–10 000 t/rok · 8. 12. 2025 · PDF</div>
+          </div>
+          <div class="doc-dl" data-i="dl3">STÁHNOUT ↓</div>
+        </a>
+
+        <a class="docitem" href="docs/B_03_Agreement_for_Treatment_Operators.pdf" target="_blank" rel="noopener">
+          <div class="doc-ico">📑</div>
+          <div class="doc-body">
+            <div class="doc-title" data-i="doc_b03">WEEELABEX – B03TR Agreement</div>
+            <div class="doc-meta" data-i="doc_b03_m">Smluvní rámec a podmínky certifikace provozovatele zpracování · Rev 05 · PDF</div>
+          </div>
+          <div class="doc-dl" data-i="dl4">STÁHNOUT ↓</div>
+        </a>
+
+        <div class="doc-note" data-i="doc_note">Provozovatelem zpracovatelského zařízení je EURO-EKOSFERA Trans, s.r.o. (IČO 177 75 451). Oba dopisy o záměru jsou nezávazné a podmíněné získáním všech potřebných oprávnění.</div>
+      </div>
+    </div>
+
+
+    <!-- ══ E: SILVER MONITOR ════════════════════════════════════════ -->
+    <div class="tab-content" id="tab-silver-content">
+      <div class="sec-tag" data-i="tag_e">E · SILVER MONITOR</div>
+      <div class="sec-title" data-i="title_e">Software pro načasování prodeje stříbra</div>
+
+      <div class="infobox">
+        <div class="infobox-label" data-i="sm_what">K ČEMU SLOUŽÍ</div>
+        <div class="infobox-text" data-i="sm_what_t">Recyklace produkuje 2 688 kg rafinovaného stříbra ročně. Silver Monitor vyhodnocuje trh a určuje, kdy kov uložit do bankovního trezoru a kdy jej prodat průmyslu s příplatkem. Rozdíl mezi prodejem v nevhodný a vhodný okamžik dosahuje u tohoto objemu jednotek milionů korun ročně – bez jakékoli dodatečné investice do technologie.</div>
+      </div>
+
+      <div class="sec-tag" data-i="sm_two_tag">DVA PROUDY, DVĚ ROLE</div>
+      <div class="sec-title" data-i="sm_two_title">Z čeho závod žije a co se mu hromadí</div>
+      <div class="jv-box">
+        <div class="jv-card left">
+          <div class="jv-label" data-i="sm_op_l">PROVOZNÍ SUROVINY</div>
+          <div class="jv-amount">60,3 mil. Kč</div>
+          <div class="jv-desc" data-i="sm_op_d">sklo · hliník · měď · křemík · gate fee — prodej do průmyslu</div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+          <div class="jv-item" data-i="sm_op1">✓ Pokrývají 100 % provozních nákladů (52,9 mil. Kč)</div>
+          <div class="jv-item" data-i="sm_op2">✓ Přebytek 7,4 mil. Kč ročně</div>
+          <div class="jv-item" data-i="sm_op3">✓ Běžný cash flow — mzdy, energie, rafinace, nájem</div>
+          <div class="jv-item" data-i="sm_op4">✓ Závod je z nich plně samofinancovatelný</div>
+        </div>
+        <div class="jv-divider">+<span data-i="sm_plus">nezávisle</span></div>
+        <div class="jv-card right">
+          <div class="jv-label" data-i="sm_ag_l">STŘÍBRO</div>
+          <div class="jv-amount teal">115,2 mil. Kč</div>
+          <div class="jv-desc" data-i="sm_ag_d">2 688 kg rafinovaného Ag ročně — trezor nebo průmysl</div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+          <div class="jv-item" data-i="sm_ag1">✓ Nemusí se prodat, aby závod fungoval</div>
+          <div class="jv-item" data-i="sm_ag2">✓ Banka nebo průmysl podle vývoje ceny</div>
+          <div class="jv-item" data-i="sm_ag3">✓ Silver Monitor určuje okamžik i kanál</div>
+          <div class="jv-item" data-i="sm_ag4">✓ Akumuluje se jako majetek franšízy</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,201,167,0.06);border:1px solid rgba(0,201,167,0.22);border-radius:4px;padding:14px 16px;font-size:12px;color:var(--text);line-height:1.8;margin-bottom:20px;" data-i="sm_two_note">
+        Zásadní rozdíl oproti běžné recyklaci: provoz se zaplatí z prodeje skla, hliníku, mědi a křemíku. Stříbro se proto nikdy nemusí prodávat pod tlakem cash flow. Může zůstat v trezoru tak dlouho, dokud Silver Monitor nevyhodnotí okamžik jako vhodný — a přidaná hodnota z něj vzniká i v době, kdy fyzicky prodáno není. Franšíza tedy žije z monetizace ostatních surovin, zatímco stříbro jí roste v majetku.
+      </div>
+      <div class="hero-metrics" style="margin-bottom:24px;">
+        <div class="hm"><div class="hm-val teal">2 688 kg</div><div class="hm-label" data-i="sm_m1">Přírůstek Ag / rok</div></div>
+        <div class="hm"><div class="hm-val">13 440 kg</div><div class="hm-label" data-i="sm_m2">Kumulace za 5 let</div></div>
+        <div class="hm"><div class="hm-val">+7,4 mil.</div><div class="hm-label" data-i="sm_m3">Provozní přebytek bez Ag (Kč/rok)</div></div>
+        <div class="hm"><div class="hm-val silver">+4,2 %</div><div class="hm-label" data-i="sm_m4">Průmyslový příplatek nad spot</div></div>
+      </div>
+
+      <div class="cards">
+        <div class="card"><div class="card-icon">🏦</div><div class="card-title" data-i="sm_c1">Bankovní ukládání</div><div class="card-desc" data-i="sm_c1_t">Při signálu k růstu se kov ukládá do trezoru a drží jako aktivum. Rafinovaná kvalita umožňuje uložení bez dalších úprav.</div></div>
+        <div class="card"><div class="card-icon">🏭</div><div class="card-title" data-i="sm_c2">Průmyslový prodej</div><div class="card-desc" data-i="sm_c2_t">Průmyslový odběratel platí nad spotovou cenu za dodávku v požadované čistotě a termínu. Software hlídá, kdy je příplatek nejvyšší.</div></div>
+        <div class="card"><div class="card-icon">🧠</div><div class="card-title" data-i="sm_c3">Neuronová síť XAG/USD</div><div class="card-desc" data-i="sm_c3_t">Neuronová síť na denním timeframu a LOKEN v4 čtou pohyby institucí. Decision framework z nich odvozuje konkrétní poměr trezor / průmysl – od maximální akumulace až po maximální prodej.</div></div>
+      </div>
+
+      <div class="sec-tag" data-i="sm_ui_tag">NÁHLED PROSTŘEDÍ</div>
+      <div class="mock-wrap">
+        <div class="mock-badge" data-i="sm_badge">MOCKUP · DEMO DATA</div>
+        <div class="mock-chrome">
+          <span class="mock-dot" style="background:#ff5f57"></span>
+          <span class="mock-dot" style="background:#febc2e"></span>
+          <span class="mock-dot" style="background:#28c840"></span>
+          <div class="mock-url">silver-monitor.com</div>
+        </div>
+        <div class="mock-app">
+          <div class="mock-top">
+            <div>
+              <div class="mock-logo">SILVER<span>MONITOR</span></div>
+              <div class="sm-sub">EVA FÓLIE → AG · RECYKLACE SOLÁRNÍCH PANELŮ</div>
+            </div>
+            <div class="sm-live"><i></i>LIVE DATA</div>
+          </div>
+
+          <div class="mock-nav">
+            <button class="mock-tab on" onclick="smTab(event,'sm1')">Trading</button>
+            <button class="mock-tab" onclick="smTab(event,'sm2')">Těžba &amp; zásoby</button>
+            <button class="mock-tab" onclick="smTab(event,'sm3')">Toky &amp; pohyby</button>
+            <button class="mock-tab" onclick="smTab(event,'sm4')">Indikátory</button>
+            <button class="mock-tab" onclick="smTab(event,'sm5')">USD &amp; ropa</button>
+            <button class="mock-tab" onclick="smTab(event,'sm6')">Makro &amp; sentiment</button>
+            <button class="mock-tab" onclick="smTab(event,'sm7')">Subscription</button>
+          </div>
+
+          <div class="mock-body">
+
+            <div class="mock-pane on" id="sm1">
+              <div class="sm-tf"><span>1m</span><span class="on">30m</span><span>1h</span><span>1D</span><span style="margin-left:auto">Indicators</span></div>
+              <div class="mock-panel">
+                <div class="mock-h" style="margin-top:0">TradingView · XAG/USD · live chart</div>
+                <div class="mock-spark">
+                  <i style="height:34%"></i><i class="d" style="height:41%"></i><i style="height:47%"></i><i style="height:52%"></i><i class="d" style="height:44%"></i><i style="height:50%"></i><i style="height:58%"></i><i class="d" style="height:49%"></i><i style="height:55%"></i><i style="height:63%"></i><i class="d" style="height:57%"></i><i style="height:64%"></i><i style="height:71%"></i><i class="d" style="height:62%"></i><i style="height:68%"></i><i style="height:76%"></i><i style="height:83%"></i><i class="d" style="height:72%"></i><i style="height:79%"></i><i style="height:88%"></i><i class="d" style="height:80%"></i><i style="height:86%"></i><i style="height:94%"></i><i style="height:97%"></i>
+                </div>
+              </div>
+              <div class="sm-strip">
+                <div><b>PAPER LEVERAGE</b><span>17,2 %</span></div>
+                <div><b>COVERAGE RATIO</b><span>14,6 %</span></div>
+                <div><b>COMEX STRESS</b><span>33 / 100</span></div>
+                <div><b>REGISTR. AG</b><span>99,7M oz</span></div>
+                <div><b>ZDROJ</b><span style="color:var(--sm-teal)">goldsilver.ai</span></div>
+              </div>
+
+              <div class="sm-rec">
+                <div>
+                  <div class="sm-rec-l">AKTUÁLNÍ DOPORUČENÍ</div>
+                  <div class="sm-rec-v">MAXIMÁLNÍ AKUMULACE</div>
+                  <div class="sm-rec-s">LOKEN: Zelené bloky + $ · COMEX Stress: Elevated 63</div>
+                </div>
+                <div class="sm-alloc">
+                  <div class="sm-rec-l">TREZOR / PRŮMYSL</div>
+                  <div class="sm-alloc-v">80 % / 20 %</div>
+                  <div class="sm-alloc-b"><span style="width:80%;background:var(--sm-teal)"></span><span style="width:20%;background:#e8706e"></span></div>
+                </div>
+              </div>
+
+              <div class="mock-h">COMEX · fyzický trh</div>
+              <div class="mock-grid">
+                <div class="mock-kpi"><div class="mock-kpi-l">COVERAGE RATIO</div><div class="mock-kpi-v">↓ 0,1 %</div><div class="mock-kpi-s">239,2K oz / 1d · stress pásmo</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">COMEX STRESS INDEX</div><div class="mock-kpi-v gold">33</div><div class="mock-kpi-s">z 100 · elevated</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">REGISTROVANÉ AG</div><div class="mock-kpi-v">99,7M oz</div><div class="mock-kpi-s">dodatelné · ↓ 85,0K oz 1d</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">PAPER LEVERAGE</div><div class="mock-kpi-v dn">17,2 %</div><div class="mock-kpi-s">papírové vs. fyzické · kritické</div></div>
+              </div>
+
+              <div class="mock-h">LOKEN v4 · smart money signal</div>
+              <div class="mock-grid">
+                <div class="mock-kpi"><div class="mock-kpi-l">ZELENÉ BLOKY</div><div class="mock-kpi-v up">●</div><div class="mock-kpi-s">Instituce nakupují · akumulace aktivní</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">$ SIGNÁL</div><div class="mock-kpi-v gold">$</div><div class="mock-kpi-s">Extrémní SM pohyb · velcí hráči vstupují</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">30M TF</div><div class="mock-kpi-v">▮▮</div><div class="mock-kpi-s">Krátkodobý signál · potvrdit 4H / 1D</div></div>
+              </div>
+              <div class="mock-panel" style="margin-top:8px;">
+                <div class="mock-row"><span class="k">Můj osobní graf</span><span class="v"><span class="sm-btn">OTEVŘÍT V TRADINGVIEW ↗</span></span></div>
+                <div class="mock-row"><span class="k">Model</span><span class="v">LOKEN v4 · LinReg · VQI · Machine Learning</span></div>
+              </div>
+
+              <div class="mock-h">Decision framework</div>
+              <div class="mock-panel">
+                <table class="mock-tbl">
+                  <tr><th>LOKEN signál</th><th>COMEX stress</th><th>Akce</th></tr>
+                  <tr><td>🟢 Zelené + $</td><td>&gt; 55</td><td><span class="mock-pill buy">MAX TREZOR 80–100 %</span></td></tr>
+                  <tr><td>🟢 Zelené bloky</td><td>40–55</td><td><span class="mock-pill buy">TREZOR 70 % · PRŮMYSL 30 %</span></td></tr>
+                  <tr><td>⚪ Neutrální</td><td>jakýkoliv</td><td><span class="mock-pill hold">DRŽ · ČEKEJ NA SIGNÁL</span></td></tr>
+                  <tr><td>🔴 Červené bloky</td><td>&lt; 40</td><td><span class="mock-pill sell">PRŮMYSL 70 % · TREZOR 30 %</span></td></tr>
+                  <tr><td>🔴 Červené + $</td><td>&lt; 30</td><td><span class="mock-pill sell">MAX PRODEJ PRŮMYSLU 80–100 %</span></td></tr>
+                </table>
+              </div>
+
+              <div class="mock-h">Aktuální signál · trading parametry</div>
+              <div class="mock-panel">
+                <div class="mock-row"><span class="k">Signál</span><span class="v"><span class="mock-pill buy">🟢 AKUMULUJ</span></span></div>
+                <div class="mock-row"><span class="k">Odůvodnění</span><span class="v">Neural Network LONG · EMA bullish · WaveTrend cross · COMEX stress 63 · 6. rok deficitu</span></div>
+                <div class="sm-param">
+                  <div class="sm-pp"><b>VSTUP</b><span>$72–74</span></div>
+                  <div class="sm-pp r"><b>STOP LOSS</b><span>$69,92</span></div>
+                  <div class="sm-pp y"><b>TARGET 1</b><span>$78–80</span></div>
+                  <div class="sm-pp"><b>TARGET 2</b><span>$84–88</span></div>
+                  <div class="sm-pp"><b>HORIZONT</b><span>4–8 týdnů</span></div>
+                </div>
+                <div class="sm-warn">⚠ Pouze informační účely · Není investičním doporučením · Rozhodnutí na vlastní zodpovědnost</div>
+              </div>
+
+              <div class="mock-h">Gold / Silver ratio</div>
+              <div class="mock-panel">
+                <div class="mock-grid" style="margin-bottom:2px;">
+                  <div class="mock-kpi"><div class="mock-kpi-l">AKTUÁLNÍ RATIO</div><div class="mock-kpi-v gold">~75 : 1</div><div class="mock-kpi-s">oz stříbra za 1 oz zlata</div></div>
+                  <div class="mock-kpi"><div class="mock-kpi-l">HISTORICKÝ PRŮMĚR</div><div class="mock-kpi-v">60 : 1</div><div class="mock-kpi-s">dlouhodobě 50–70:1</div></div>
+                  <div class="mock-kpi"><div class="mock-kpi-l">SIGNÁL</div><div class="mock-kpi-v up">AKUMULUJ Ag</div><div class="mock-kpi-s">stříbro podhodnoceno vs. zlato</div></div>
+                </div>
+                <div class="sm-scale"></div>
+                <div class="sm-scale-l"><span>30:1 Ag drahé</span><span>50:1 neutrál</span><b>▲ 75:1 dnes</b><span>100:1+ extrém</span></div>
+                <div class="sm-warn" style="color:var(--sm-dim)">80/50 pravidlo: ratio nad 80 → kupuj Ag · ratio pod 50 → přesuň do Au</div>
+              </div>
+
+              <div class="mock-h">Fear &amp; Greed · komodity</div>
+              <div class="mock-panel">
+                <div class="sm-gauge">
+                  <div class="sm-gauge-v">55<small>NEUTRAL / GREED</small></div>
+                  <div class="sm-gauge-l">
+                    0–25 · Extrémní strach → silný BUY signál pro Ag<br>
+                    25–50 · Strach → příznivé pro akumulaci<br>
+                    50–75 · Chamtivost → sleduj LOKEN signály<br>
+                    75–100 · Extrémní chamtivost → zvažuj realizaci
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm2">
+              <div class="mock-h">Světová těžba 2025</div>
+              <div class="sm-two">
+                <div class="up">
+                  <h5>CELKOVÁ SVĚTOVÁ TĚŽBA</h5>
+                  <div class="mock-kpi-v" style="font-size:21px">26 330 t</div>
+                  <p style="margin-top:6px">= 846,6M oz / rok · +3 %<br>Peru +7 %, Chile +8 % · nestačí pokrýt poptávku</p>
+                </div>
+                <div class="dn">
+                  <h5>CELKOVÁ POPTÁVKA TRHU</h5>
+                  <div class="mock-kpi-v" style="font-size:21px;color:#e8706e">35 181 t</div>
+                  <p style="margin-top:6px">= 1 130,6M oz / rok · −2 %<br>Deficit 2025: −1 254 t · −40,3M oz · 5. rok v řadě</p>
+                </div>
+              </div>
+              <div class="mock-h">Top 10 producentů · 1 t = 32 150 oz</div>
+              <div class="sm-prod">
+                <div class="sm-pr"><div class="sm-pr-h"><span class="sm-pr-n">#1 Mexiko</span><span class="sm-pr-v">6 300 t<small>202,5M oz</small></span></div><div class="mock-bar"><i style="width:100%"></i></div><div class="sm-pr-x">25 % světové produkce · drží pozici desetiletí<br>Fresnillo, Peñasquito/Newmont · Zacatecas, Durango</div></div>
+                <div class="sm-pr" style="border-left-color:#5b9bd5"><div class="sm-pr-h"><span class="sm-pr-n">#2 Čína</span><span class="sm-pr-v">3 300 t<small>106,1M oz</small></span></div><div class="mock-bar"><i style="width:52%;background:#5b9bd5"></i></div><div class="sm-pr-x">13 % produkce · byproduct Pb/Zn dolů<br>⚠ Čína omezila export Ag od 1. 1. 2026</div></div>
+                <div class="sm-pr" style="border-left-color:#e0b53e"><div class="sm-pr-h"><span class="sm-pr-n">#3 Peru</span><span class="sm-pr-v">3 100 t<small>99,7M oz</small></span></div><div class="mock-bar"><i style="width:49%;background:#e0b53e"></i></div><div class="sm-pr-x">12 % produkce · Antamina · byproduct mědi<br>Sociální nepokoje ovlivňují těžbu</div></div>
+                <div class="sm-pr" style="border-left-color:#9b7fd4"><div class="sm-pr-h"><span class="sm-pr-n">#4 Bolívie</span><span class="sm-pr-v">1 400 t<small>45,0M oz</small></span></div><div class="mock-bar"><i style="width:22%;background:#9b7fd4"></i></div><div class="sm-pr-x">5,6 % produkce · Cerro Rico (Potosí)<br>Silné státní zapojení v těžbě</div></div>
+              </div>
+              <div class="mock-h">Průmyslová poptávka · globální Ag</div>
+              <div class="sm-two" style="margin-bottom:10px">
+                <div class="dn"><h5>TRŽNÍ DEFICIT 2025</h5><div class="mock-kpi-v" style="font-size:19px;color:#e8706e">−40,3 mil. oz</div><p style="margin-top:5px">poptávka převyšuje supply · 5. rok v řadě</p></div>
+                <div class="dn"><h5>KUMULATIVNÍ DEFICIT 2021–2025</h5><div class="mock-kpi-v" style="font-size:19px;color:#e8706e">−796 mil. oz</div><p style="margin-top:5px">= téměř 1 rok globální těžby</p></div>
+              </div>
+              <div class="mock-panel">
+                <div class="sm-dem"><div class="sm-dem-h"><span>☀ Solární panely (FV)</span><b>186,6M oz · 28 %</b></div><div class="mock-bar"><i style="width:28%"></i></div><div class="sm-dem-x">−6 % · TOPCon thrifting snižuje spotřebu Ag/panel · stále #1 průmyslový odběratel</div></div>
+                <div class="sm-dem"><div class="sm-dem-h"><span>💻 Elektronika &amp; elektro</span><b>280M oz · 42 %</b></div><div class="mock-bar"><i style="width:42%;background:#e0b53e"></i></div><div class="sm-dem-x">AI servery, 5G, IoT, datová centra — nejrychlejší růst</div></div>
+                <div class="sm-dem"><div class="sm-dem-h"><span>🚗 Elektromobily (EV)</span><b>~95M oz · 14 %</b></div><div class="mock-bar"><i style="width:14%;background:#e8706e"></i></div><div class="sm-dem-x">25–50 g Ag/EV · CAGR +3,4 % ročně</div></div>
+                <div class="sm-dem"><div class="sm-dem-h"><span>🏥 Ostatní (med., AI, stavebnictví)</span><b>~96M oz · 14 %</b></div><div class="mock-bar"><i style="width:14%;background:#9b7fd4"></i></div><div class="sm-dem-x">Antimikrobiální aplikace, zdravotnictví, grid infrastruktura</div></div>
+              </div>
+              <div class="mock-grid">
+                <div class="mock-kpi"><div class="mock-kpi-l">SOLÁR DO 2030</div><div class="mock-kpi-v up">250M oz</div><div class="mock-kpi-s">ročně · z 186,6M oz (2025)</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">EV POPTÁVKA 2030</div><div class="mock-kpi-v up">130M oz</div><div class="mock-kpi-s">CAGR +3,4 % ročně</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">DEFICIT 2026 (prognóza)</div><div class="mock-kpi-v dn">−46,3M oz</div><div class="mock-kpi-s">6. rok v řadě</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">VLASTNÍ PRODUKCE</div><div class="mock-kpi-v gold">2 688 kg</div><div class="mock-kpi-s">z recyklace FV panelů / rok</div></div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm3">
+              <div class="mock-h">COMEX · denní změny zásob</div>
+              <div class="mock-panel">
+                <div class="mock-row"><span class="k">Manuální aktualizace · zdroj goldsilver.ai</span><span class="v"><span class="sm-btn">OTEVŘÍT GOLDSILVER.AI ↗</span></span></div>
+              </div>
+              <div class="mock-grid">
+                <div class="mock-kpi"><div class="mock-kpi-l">REGISTERED (dodatelné)</div><div class="mock-kpi-v">99,7M oz</div><div class="mock-kpi-s">↓ 0,1 % (85,0K oz) 1d · ↑ 6,7 % 30d</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">ELIGIBLE (uložené)</div><div class="mock-kpi-v">234,3M oz</div><div class="mock-kpi-s">↓ 0,1 % (239,2K oz) 1d · ↑ 0,5 % 30d</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">OPEN INTEREST · STRESS</div><div class="mock-kpi-v dn">579,4M oz</div><div class="mock-kpi-s">17,2 % · index 33</div></div>
+              </div>
+              <div class="mock-h">Mapa toků mezi institucemi</div>
+              <div class="mock-panel">
+                <svg viewBox="0 0 640 250" style="width:100%;height:auto;">
+                  <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3ee0a0"/></marker>
+                  <marker id="ar2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#e0b53e"/></marker>
+                  <marker id="ar3" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#e8706e"/></marker></defs>
+                  <path d="M150,110 Q300,40 430,95" stroke="#e0b53e" stroke-width="2" fill="none" stroke-dasharray="5,4" marker-end="url(#ar2)"/>
+                  <path d="M470,105 Q540,120 560,140" stroke="#e8706e" stroke-width="2" fill="none" stroke-dasharray="5,4" marker-end="url(#ar3)"/>
+                  <path d="M160,130 Q330,190 500,175" stroke="#3ee0a0" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+                  <path d="M140,140 Q130,190 128,205" stroke="#3ee0a0" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+                  <path d="M440,120 Q420,160 400,180" stroke="#e0b53e" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#ar2)"/>
+                  <circle cx="140" cy="120" r="30" fill="rgba(224,181,62,0.13)" stroke="#e0b53e" stroke-width="1.5"/>
+                  <text x="140" y="117" text-anchor="middle" fill="#e0b53e" font-size="10" font-family="monospace">COMEX</text>
+                  <text x="140" y="129" text-anchor="middle" fill="#e0b53e" font-size="9" font-family="monospace">New York</text>
+                  <circle cx="450" cy="95" r="32" fill="rgba(62,224,160,0.13)" stroke="#3ee0a0" stroke-width="1.5"/>
+                  <text x="450" y="92" text-anchor="middle" fill="#3ee0a0" font-size="10" font-family="monospace">LBMA</text>
+                  <text x="450" y="104" text-anchor="middle" fill="#3ee0a0" font-size="9" font-family="monospace">Londýn</text>
+                  <circle cx="578" cy="150" r="27" fill="rgba(232,112,110,0.13)" stroke="#e8706e" stroke-width="1.5"/>
+                  <text x="578" y="147" text-anchor="middle" fill="#e8706e" font-size="9" font-family="monospace">SHFE</text>
+                  <text x="578" y="158" text-anchor="middle" fill="#e8706e" font-size="9" font-family="monospace">Šanghaj</text>
+                  <circle cx="300" cy="120" r="25" fill="rgba(91,155,213,0.13)" stroke="#5b9bd5" stroke-width="1.5"/>
+                  <text x="300" y="118" text-anchor="middle" fill="#5b9bd5" font-size="9" font-family="monospace">ETF</text>
+                  <text x="300" y="129" text-anchor="middle" fill="#5b9bd5" font-size="8" font-family="monospace">SLV/PSLV</text>
+                  <circle cx="395" cy="190" r="24" fill="rgba(155,127,212,0.13)" stroke="#9b7fd4" stroke-width="1.5"/>
+                  <text x="395" y="193" text-anchor="middle" fill="#9b7fd4" font-size="9" font-family="monospace">Indie</text>
+                  <circle cx="125" cy="215" r="26" fill="rgba(62,224,160,0.1)" stroke="#3ee0a0" stroke-width="1.5"/>
+                  <text x="125" y="213" text-anchor="middle" fill="#3ee0a0" font-size="8" font-family="monospace">Těžba</text>
+                  <text x="125" y="223" text-anchor="middle" fill="#3ee0a0" font-size="8" font-family="monospace">MX/PE/CN</text>
+                  <circle cx="515" cy="180" r="27" fill="rgba(62,224,160,0.1)" stroke="#3ee0a0" stroke-width="1.5"/>
+                  <text x="515" y="178" text-anchor="middle" fill="#3ee0a0" font-size="8" font-family="monospace">Průmysl</text>
+                  <text x="515" y="188" text-anchor="middle" fill="#3ee0a0" font-size="8" font-family="monospace">solár/EV</text>
+                  <text x="285" y="62" fill="#e0b53e" font-size="9" font-family="monospace">~200M oz</text>
+                  <text x="505" y="112" fill="#e8706e" font-size="9" font-family="monospace">−100M oz</text>
+                  <text x="300" y="200" fill="#3ee0a0" font-size="9" font-family="monospace">~400M oz</text>
+                </svg>
+                <div class="mock-row" style="border-top:1px solid var(--sm-line);margin-top:6px"><span class="k">Filtr období</span><span class="v">VŠE · PŮJČKY · PRODEJE/NÁKUPY · PŘESUNY · 10 událostí</span></div>
+              </div>
+              <div class="mock-h">Chronologie klíčových pohybů · 2024–2026</div>
+              <div class="sm-tl y">
+                <div class="sm-tl-h"><span class="sm-tl-n">Masivní přesun COMEX → Londýn (tariffní arbitráž)</span><span class="sm-tl-m">PŘESUN · 2024 Q1–Q2<b>~200M oz · 6 220 t</b></span></div>
+                <div class="sm-tl-r">Z: COMEX New York → Do: LBMA Londýn</div>
+                <div class="sm-tl-x">Obchodníci přesouvají Ag z New Yorku do Londýna kvůli obavám z US cel. COMEX zásoby klesají, LBMA roste. Čistý přesun bez změny vlastníka.</div>
+              </div>
+              <div class="sm-tl">
+                <div class="sm-tl-h"><span class="sm-tl-n">Roční průmyslový odběr — solár, EV, elektronika</span><span class="sm-tl-m">NÁKUP/PRODEJ · 2024 Q3<b>~400M oz · 12 440 t</b></span></div>
+                <div class="sm-tl-r">Z: Těžba (Mexiko/Peru/Čína) → Do: Průmysl (Asie/EU)</div>
+                <div class="sm-tl-x">Pravidelný tok z dolů přes rafinerie do průmyslu. Největší podíl: solární FV buňky, elektronika. Trvalý transfer — kov je spotřebován.</div>
+              </div>
+              <div class="sm-tl r">
+                <div class="sm-tl-h"><span class="sm-tl-n">⚡ Kritická půjčka: LBMA → SHFE (Silver Squeeze)</span><span class="sm-tl-m">PŮJČKA · 2025 říjen<b>~100M oz · 3 110 t</b></span></div>
+                <div class="sm-tl-r">Z: LBMA Londýn → Do: SHFE Šanghaj</div>
+                <div class="sm-tl-x">Čínská burza vyčerpala zásoby. LBMA zapůjčila fyzické Ag aby zabránila defaultu. Lease rates explodovaly na 39 %. Spustilo globální cenový výkyv.</div>
+              </div>
+              <div class="sm-tl b">
+                <div class="sm-tl-h"><span class="sm-tl-n">Indická poptávka — rekordní import</span><span class="sm-tl-m">PŘESUN · 2025 říjen<b>~1 000 t · 32M oz</b></span></div>
+                <div class="sm-tl-r">Z: Indie → Do: LBMA Londýn</div>
+                <div class="sm-tl-x">Indie importovala ~1 000 t Ag v září 2025 — 25× více než obvykle. RBI plánuje přijmout Ag jako zástavní kolaterál od dubna 2026.</div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm4">
+              <div class="mock-h">Neuronová síť 1D · výstup modelu</div>
+              <div class="mock-panel">
+                <div class="mock-row"><span class="k">Výstup</span><span class="v"><span class="mock-pill buy">LONG</span></span></div>
+                <div class="mock-row"><span class="k">Jistota modelu</span><span class="v">0,71</span></div>
+                <div class="mock-bar"><i style="width:71%"></i></div>
+                <div class="mock-row"><span class="k">Profit factor (backtest)</span><span class="v">2,03</span></div>
+                <div class="mock-row"><span class="k">Backtest výnos</span><span class="v">+78,64 %</span></div>
+                <div class="mock-row"><span class="k">Timeframe</span><span class="v">1D · potvrzení 4H</span></div>
+              </div>
+              <div class="mock-h">Technické indikátory</div>
+              <div class="mock-panel">
+                <table class="mock-tbl">
+                  <tr><th>Indikátor</th><th>Hodnota</th><th>Signál</th></tr>
+                  <tr><td>EMA 20 / 50</td><td>bullish cross</td><td><span class="mock-pill buy">BÝČÍ</span></td></tr>
+                  <tr><td>WaveTrend</td><td>cross nahoru</td><td><span class="mock-pill buy">BÝČÍ</span></td></tr>
+                  <tr><td>RSI (14)</td><td>63,8</td><td><span class="mock-pill hold">NEUTRÁL</span></td></tr>
+                  <tr><td>MACD</td><td>+0,84</td><td><span class="mock-pill buy">BÝČÍ</span></td></tr>
+                  <tr><td>LinReg kanál</td><td>horní třetina</td><td><span class="mock-pill hold">SLEDUJ</span></td></tr>
+                  <tr><td>VQI</td><td>rostoucí objem</td><td><span class="mock-pill buy">BÝČÍ</span></td></tr>
+                  <tr><td>Bollinger</td><td>horní pásmo</td><td><span class="mock-pill sell">PŘEKOUPENO</span></td></tr>
+                  <tr><td>ATR (14)</td><td>2,41</td><td><span class="mock-pill hold">VYSOKÁ VOL.</span></td></tr>
+                </table>
+              </div>
+              <div class="mock-h">LOKEN v4 · smart money bloky</div>
+              <div class="mock-panel">
+                <div class="mock-row"><span class="k">Zelené bloky</span><span class="v">aktivní · instituce nakupují</span></div>
+                <div class="mock-row"><span class="k">$ signál</span><span class="v">extrémní pohyb smart money</span></div>
+                <div class="mock-row"><span class="k">Potvrzení 30M TF</span><span class="v">ano</span></div>
+                <div class="mock-row"><span class="k">Výsledná akce</span><span class="v"><span class="mock-pill buy">MAX TREZOR 80–100 %</span></span></div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm5">
+              <div class="mock-h">Dolar a ropa</div>
+              <div class="sm-strip">
+                <div><b>DXY · USD INDEX</b><span>98,22</span></div>
+                <div><b>BRENT CRUDE</b><span>$110,5</span></div>
+                <div><b>WTI CRUDE</b><span>$101,7</span></div>
+              </div>
+              <div class="mock-panel">
+                <div class="mock-row"><span class="k">DXY · vývoj</span><span class="v">↓ −1,80 % / 30d · 52W 95,55–101,98</span></div>
+                <div class="mock-row"><span class="k">Výklad</span><span class="v" style="color:var(--sm-teal)">Slabý USD = BULLISH pro Ag ✓</span></div>
+                <div class="mock-row"><span class="k">Brent</span><span class="v">+$53 za rok · Hormuz uzavřen · supply shock</span></div>
+                <div class="mock-row"><span class="k">Výklad</span><span class="v" style="color:#e0b53e">Inflace → Fed drží sazby → smíšené pro Ag</span></div>
+                <div class="mock-row"><span class="k">WTI</span><span class="v">z $62 před rokem · 4-leté maximum</span></div>
+                <div class="mock-row"><span class="k">Energie v ceně recyklace</span><span class="v">543 Kč / t vstupu</span></div>
+              </div>
+              <div class="mock-h">Interpretační matice · vliv na cenu stříbra</div>
+              <div class="sm-two">
+                <div class="up">
+                  <h5>↓ DXY KLESÁ → Ag ↑ ROSTE</h5>
+                  <p>· Ag je v USD → slabší dolar = levnější pro cizince = vyšší poptávka<br>· Inflační tlak → bezpečný přístav<br>· Fed dovish pivot<br>· DXY pod 98 → silný bullish signál<br>· AKTUÁLNĚ: DXY 98,22 ↓ → BULLISH ✓</p>
+                </div>
+                <div class="dn">
+                  <h5>↑ DXY ROSTE → Ag ↓ KLESÁ</h5>
+                  <p>· Silný dolar zdražuje Ag pro ostatní měny<br>· Fed hawkish → vyšší sazby → náklady držení Ag<br>· Risk-off prostředí → přesun do USD<br>· DXY nad 104 → bearish tlak<br>· Sleduj: Fed řeči, jobs data, CPI</p>
+                </div>
+              </div>
+              <div class="mock-panel" style="margin-top:10px">
+                <div class="mock-h" style="margin-top:0">Klíčové DXY úrovně pro Ag trading</div>
+                <div class="sm-scale"></div>
+                <div class="sm-scale-l"><span>90 silně bullish</span><span>95 bullish</span><b>▲ 98,2 dnes</b><span>101 neutrál</span><span>104+ bearish</span></div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm6">
+              <div class="mock-h">Signálový teploměr · aktuální stav pro Ag</div>
+              <div class="sm-rec">
+                <div>
+                  <div class="sm-rec-l">CELKOVÝ SIGNÁL PRO STŘÍBRO</div>
+                  <div class="sm-rec-v">SILNĚ BULLISH</div>
+                  <div class="sm-rec-s">Skóre 12 / 24 · 10 bullish · 2 bearish · 0 neutrální</div>
+                </div>
+              </div>
+              <div class="sm-sig">
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">💵 DXY (USD Index)</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">98,2 <small>bodů</small></div><div class="sm-sc-d">↓ −1,8 % / měsíc</div><div class="sm-sc-x">Slabý USD → Ag levnější pro cizince</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🛢 Brent (ropa)</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">$110,5 <small>/barel</small></div><div class="sm-sc-d">↑ +$53 za rok</div><div class="sm-sc-x">Drahá ropa → inflace → Ag hedge</div></div>
+                <div class="sm-sc bear"><div class="sm-sc-h"><span class="sm-sc-n">🏛 Fed sazby vs. CPI</span><span class="sm-sc-t bear">BEARISH</span></div><div class="sm-sc-v">+1,0 % <small>reálná sazba</small></div><div class="sm-sc-d">Fed 3,5–3,75 % · CPI 2,4 %</div><div class="sm-sc-x">Kladná reálná sazba → mírný tlak na Ag</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🏭 COMEX Stress</span><span class="sm-sc-t">SILNĚ BULLISH</span></div><div class="sm-sc-v">63 / 100</div><div class="sm-sc-d">Coverage 16,8 % · leverage 5,9×</div><div class="sm-sc-x">Elevated stress → fyzický nedostatek</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">📉 Tržní deficit</span><span class="sm-sc-t">SILNĚ BULLISH</span></div><div class="sm-sc-v">−40M oz <small>2025</small></div><div class="sm-sc-d">5. rok deficitu v řadě</div><div class="sm-sc-x">Poptávka &gt; supply → strukturálně bullish</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🇨🇳 Čína export ban</span><span class="sm-sc-t">SILNĚ BULLISH</span></div><div class="sm-sc-v">AKTIVNÍ <small>od 1. 1. 2026</small></div><div class="sm-sc-d">44 licencí · strategická komodita</div><div class="sm-sc-x">Export zastaven → globální supply šok</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🇮🇳 Indie poptávka</span><span class="sm-sc-t">SILNĚ BULLISH</span></div><div class="sm-sc-v">HISTORICKÁ <small>RBI kolaterál</small></div><div class="sm-sc-d">Import září ~1 000 t · +2 500 %</div><div class="sm-sc-x">RBI uznala Ag jako monetum</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🤖 AI Capex</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">$690B <small>2026</small></div><div class="sm-sc-d">↑ +36 % YoY · datacenter boom</div><div class="sm-sc-x">Rostoucí AI infra → více Ag v elektronice</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">⚖ Gold/Silver Ratio</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">~75 : 1</div><div class="sm-sc-d">↓ z maxima 100+ (2025)</div><div class="sm-sc-x">Ratio nad 60 → Ag podhodnoceno</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">🏦 LBMA Lease Rates</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">~2–3 % <small>1M sazba</small></div><div class="sm-sc-d">↓ z maxima 39 % (říjen 2025)</div><div class="sm-sc-x">Klesá z extrémů, ale nad normálem</div></div>
+                <div class="sm-sc"><div class="sm-sc-h"><span class="sm-sc-n">📋 COT · Managed Money</span><span class="sm-sc-t">BULLISH</span></div><div class="sm-sc-v">NET LONG <small>COMEX</small></div><div class="sm-sc-d">Spekulanti drží long pozice</div><div class="sm-sc-x">Bullish sentiment · sleduj přeplněnost</div></div>
+                <div class="sm-sc bear"><div class="sm-sc-h"><span class="sm-sc-n">📊 10Y Treasury Yield</span><span class="sm-sc-t bear">BEARISH</span></div><div class="sm-sc-v">4,38 %</div><div class="sm-sc-d">↑ +0,07 % za měsíc</div><div class="sm-sc-x">Rostoucí výnosy = konkurence pro Ag</div></div>
+              </div>
+              <div class="mock-h">AI Capex · indikátor průmyslové poptávky po Ag</div>
+              <div class="mock-grid">
+                <div class="mock-kpi"><div class="mock-kpi-l">AI CAPEX 2026 · HYPERSCALEŘI</div><div class="mock-kpi-v up">$690B</div><div class="mock-kpi-s">↑ +36 % vs. 2025 · 75 % = AI infrastruktura</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">NVIDIA DATACENTER Q4</div><div class="mock-kpi-v gold">$41B</div><div class="mock-kpi-s">+56 % YoY · proxy pro Ag v GPU pájkách</div></div>
+                <div class="mock-kpi"><div class="mock-kpi-l">DATACENTER CAPEX 2026</div><div class="mock-kpi-v">$1T+</div><div class="mock-kpi-s">↑ +57 % vs. 2025 · poprvé přes bilion</div></div>
+              </div>
+              <div class="mock-panel">
+                <table class="mock-tbl">
+                  <tr><th>Hyperscaler</th><th>Capex 2026</th><th>Poznámka</th></tr>
+                  <tr><td>Amazon AWS</td><td>$200B</td><td>Největší capex · Stargate projekt</td></tr>
+                  <tr><td>Alphabet (Google)</td><td>$180B</td><td>TPU čipy = specifická poptávka po Ag</td></tr>
+                  <tr><td>Meta AI</td><td>$125B</td><td>Llama · AR/VR headsety (Ag v displejích)</td></tr>
+                  <tr><td>Microsoft Azure</td><td>$120B</td><td>OpenAI partnership · Copilot infrastruktura</td></tr>
+                </table>
+              </div>
+              <div class="sm-two">
+                <div class="up"><h5>BULLISH SIGNÁLY</h5><p>▲ Hyperscaler capex guidance zvyšuje odhady<br>▲ NVIDIA datacenter revenue překonává očekávání<br>▲ Nové AI projekty oznámeny<br>▲ Semiconductor sales rostou meziměsíčně</p></div>
+                <div class="dn"><h5>BEARISH / SLEDUJ</h5><p>▼ Hyperscaler snižuje capex guidance<br>▼ AI boom zpomaluje — méně GPU objednávek<br>▼ Recese snižuje průmyslovou poptávku<br>▼ Thrifting — méně Ag na chip (jako u solárních panelů)</p></div>
+              </div>
+            </div>
+
+            <div class="mock-pane" id="sm7">
+              <div class="mock-h">Předplatné</div>
+              <div class="mock-tier">
+                <div class="mock-tier-c">
+                  <div class="mock-tier-n">STARTER</div>
+                  <div class="mock-tier-p">—</div>
+                  <div class="mock-tier-i">Spot a Gold/Silver ratio</div>
+                  <div class="mock-tier-i">Denní shrnutí trhu</div>
+                  <div class="mock-tier-i">COMEX zásoby</div>
+                </div>
+                <div class="mock-tier-c">
+                  <div class="mock-tier-n">TRADER</div>
+                  <div class="mock-tier-p">—</div>
+                  <div class="mock-tier-i">Vše ze Starter</div>
+                  <div class="mock-tier-i">LOKEN v4 signály + neuronová síť</div>
+                  <div class="mock-tier-i">Toky, těžba, indikátory, makro</div>
+                  <div class="mock-tier-i">Trading parametry a push upozornění</div>
+                </div>
+                <div class="mock-tier-c hi">
+                  <div class="mock-tier-n">PRO</div>
+                  <div class="mock-tier-p">—</div>
+                  <div class="mock-tier-i">Vše z Trader</div>
+                  <div class="mock-tier-i">Decision framework trezor / průmysl</div>
+                  <div class="mock-tier-i">Napojení na měsíční výtěžnost závodu</div>
+                  <div class="mock-tier-i">Log rozhodnutí a reporting pro franšízu</div>
+                </div>
+              </div>
+              <div class="mock-panel" style="margin-top:10px;">
+                <div class="mock-row"><span class="k">Režim pro provoz závodu</span><span class="v">PRO — napojení na 2 688 kg Ag / rok z recyklace</span></div>
+                <div class="mock-row"><span class="k">Výstup pro franšízanta</span><span class="v">měsíční alokace trezor / průmysl + doložený log</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-tag" data-i="sm_eu_tag">DOPLŇKOVÝ NÁSTROJ</div>
+      <div class="sec-title" data-i="sm_eu_title">EU Solar Recyklace — mapování dostupné suroviny</div>
+      <div class="infobox">
+        <div class="infobox-label" data-i="sm_eu_l">K ČEMU SLOUŽÍ</div>
+        <div class="infobox-text" data-i="sm_eu_t">Doplňkový nástroj, který mapuje instalovanou kapacitu solárních panelů napříč Evropou a slouží k plánování dostupnosti vstupního materiálu. Pro provoz závodu je rozhodující Silver Monitor; tento přehled poskytuje kontext o velikosti trhu.</div>
+      </div>
+
+      <div class="mock-wrap">
+        <div class="mock-badge" data-i="sm_badge2">MOCKUP · DEMO DATA</div>
+        <div class="mock-chrome">
+          <span class="mock-dot" style="background:#ff5f57"></span>
+          <span class="mock-dot" style="background:#febc2e"></span>
+          <span class="mock-dot" style="background:#28c840"></span>
+          <div class="mock-url">eu-solar-recyklace</div>
+        </div>
+        <div class="mock-app">
+          <div class="mock-top">
+            <div>
+              <div class="mock-logo">EU SOLAR <span>RECYKLACE</span></div>
+              <div class="sm-sub">POTENCIÁL STŘÍBRA Z EVA FÓLIÍ · 27 ZEMÍ EU</div>
+            </div>
+            <div class="sm-live"><i></i>2025</div>
+          </div>
+          <div class="mock-body">
+            <div class="mock-h" style="margin-top:6px">Česko · detail</div>
+            <div class="mock-grid">
+              <div class="mock-kpi"><div class="mock-kpi-l">INSTALOVANÁ KAPACITA</div><div class="mock-kpi-v up">4,4 GW</div><div class="mock-kpi-s">11,0 mil. panelů</div></div>
+              <div class="mock-kpi"><div class="mock-kpi-l">HMOTNOST PANELŮ</div><div class="mock-kpi-v">~242 000 t</div><div class="mock-kpi-s">instalovaná báze</div></div>
+              <div class="mock-kpi"><div class="mock-kpi-l">DOSTUPNÉ K RECYKLACI</div><div class="mock-kpi-v gold">70 000 t</div><div class="mock-kpi-s">29 % báze · výměna technologie</div></div>
+              <div class="mock-kpi"><div class="mock-kpi-l">OBSAŽENÉ STŘÍBRO</div><div class="mock-kpi-v">49 t</div><div class="mock-kpi-s">v dostupném objemu</div></div>
+            </div>
+            <div class="mock-h">Evropský kontext · instalovaná kapacita</div>
+            <div class="eu-rank">
+              <div><i>1</i><b>Německo</b><s>90 GW</s><u><em style="width:100%"></em></u></div>
+              <div><i>2</i><b>Španělsko</b><s>76 GW</s><u><em style="width:84%"></em></u></div>
+              <div><i>3</i><b>Itálie</b><s>73 GW</s><u><em style="width:81%"></em></u></div>
+              <div><i>4</i><b>Francie</b><s>24 GW</s><u><em style="width:27%"></em></u></div>
+              <div><i>5</i><b>Nizozemsko</b><s>24 GW</s><u><em style="width:27%"></em></u></div>
+              <div><i>6</i><b>Polsko</b><s>20 GW</s><u><em style="width:22%"></em></u></div>
+            </div>
+            <div class="mock-panel" style="margin-top:10px">
+              <div class="mock-row"><span class="k">EU celkem</span><span class="v">406 GW instalované kapacity</span></div>
+              <div class="mock-row"><span class="k">Nové instalace EU 2025</span><span class="v">65 GW / rok · cíl 2030 = 750 GW</span></div>
+              <div class="mock-row"><span class="k">Význam pro závod</span><span class="v" style="color:var(--sm-teal)">Německo s 90 GW leží 100 km od Mostu-Rudolic</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-note" data-i="sm_note">Zobrazené prostředí je nezávazný náhled uživatelského rozhraní. Veškerá data jsou ilustrativní a neodpovídají skutečným pozicím ani obchodním výsledkům. Silver Monitor je samostatný nástroj ROOMS MANAGEMENT a není součástí předmětu investice do odštěpného závodu; jeho výstupy slouží provozu závodu při rozhodování o načasování prodeje kovu. Přístup do produkčního prostředí není poskytován.</div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>ROOMS MANAGEMENT s.r.o. · IČZ CZU01425 · IČZ CZA01672 · robertmelc@gmail.com</span>
+    <span data-i="footer_conf">Důvěrné · Pouze pro autorizované osoby</span>
+  </footer>
+</div>
+
+<script>
+const USERS = {
+  'robert.melc@gmail.com': 'RM2026admin',
+  'investor1@example.com': 'Solar2026',
+  'investor2@example.com': 'Solar2026',
+  'investor3@example.com': 'Solar2026',
+  'investor4@example.com': 'Solar2026',
+};
+
+const T = {
+  cs:{
+    lt:'Přihlášení',ls:'Přihlašovací údaje pro přístup k dokumentaci',
+    ll_email:'E-MAIL',ll_pass:'HESLO',lb:'Přihlásit se →',
+    le:'Nesprávný e-mail nebo heslo.',
+    lf:'ROOMS MANAGEMENT s.r.o. · Přístup pouze pro autorizované osoby',
+    hbrand:'Investor Portal',logoutbtn:'Odhlásit',
+    tab_overview:'☀ Přehled',tab_tech:'A · Dokumentace Technologie',
+    tab_silver:'E · Silver Monitor',tag_e:'E · SILVER MONITOR',title_e:'Software pro načasování prodeje stříbra',
+    sm_eu_tag:'DOPLŇKOVÝ NÁSTROJ',sm_eu_title:'EU Solar Recyklace — mapování dostupné suroviny',
+    sm_eu_l:'K ČEMU SLOUŽÍ',sm_eu_t:'Doplňkový nástroj, který mapuje instalovanou kapacitu solárních panelů napříč Evropou a slouží k plánování dostupnosti vstupního materiálu. Pro provoz závodu je rozhodující Silver Monitor; tento přehled poskytuje kontext o velikosti trhu.',
+    sm_badge2:'MOCKUP · DEMO DATA',
+    sm_two_tag:'DVA PROUDY, DVĚ ROLE',sm_two_title:'Z čeho závod žije a co se mu hromadí',
+    sm_op_l:'PROVOZNÍ SUROVINY',sm_op_d:'sklo · hliník · měď · křemík · gate fee — prodej do průmyslu',
+    sm_op1:'✓ Pokrývají 100 % provozních nákladů (52,9 mil. Kč)',sm_op2:'✓ Přebytek 7,4 mil. Kč ročně',sm_op3:'✓ Běžný cash flow — mzdy, energie, rafinace, nájem',sm_op4:'✓ Závod je z nich plně samofinancovatelný',
+    sm_plus:'nezávisle',sm_ag_l:'STŘÍBRO',sm_ag_d:'2 688 kg rafinovaného Ag ročně — trezor nebo průmysl',
+    sm_ag1:'✓ Nemusí se prodat, aby závod fungoval',sm_ag2:'✓ Banka nebo průmysl podle vývoje ceny',sm_ag3:'✓ Silver Monitor určuje okamžik i kanál',sm_ag4:'✓ Akumuluje se jako majetek franšízy',
+    sm_two_note:'Zásadní rozdíl oproti běžné recyklaci: provoz se zaplatí z prodeje skla, hliníku, mědi a křemíku. Stříbro se proto nikdy nemusí prodávat pod tlakem cash flow. Může zůstat v trezoru tak dlouho, dokud Silver Monitor nevyhodnotí okamžik jako vhodný — a přidaná hodnota z něj vzniká i v době, kdy fyzicky prodáno není. Franšíza tedy žije z monetizace ostatních surovin, zatímco stříbro jí roste v majetku.',
+    sm_m1:'Přírůstek Ag / rok',sm_m2:'Kumulace za 5 let',sm_m3:'Provozní přebytek bez Ag (Kč/rok)',sm_m4:'Průmyslový příplatek nad spot',
+
+    sm_what:'K ČEMU SLOUŽÍ',sm_what_t:'Recyklace produkuje 2 688 kg rafinovaného stříbra ročně. Silver Monitor vyhodnocuje trh a určuje, kdy kov uložit do bankovního trezoru a kdy jej prodat průmyslu s příplatkem. Rozdíl mezi prodejem v nevhodný a vhodný okamžik dosahuje u tohoto objemu jednotek milionů korun ročně – bez jakékoli dodatečné investice do technologie.',
+    sm_c1:'Bankovní ukládání',sm_c1_t:'Při signálu k růstu se kov ukládá do trezoru a drží jako aktivum. Rafinovaná kvalita umožňuje uložení bez dalších úprav.',
+    sm_c2:'Průmyslový prodej',sm_c2_t:'Průmyslový odběratel platí nad spotovou cenu za dodávku v požadované čistotě a termínu. Software hlídá, kdy je příplatek nejvyšší.',
+    sm_c3:'Rozhodovací rámec',sm_c3_t:'Neuronová síť na denním timeframu a LOKEN v4 čtou pohyby institucí. Decision framework z nich odvozuje konkrétní poměr trezor / průmysl – od maximální akumulace až po maximální prodej.',
+    sm_ui_tag:'NÁHLED PROSTŘEDÍ',sm_badge:'MOCKUP · DEMO DATA',
+    sm_note:'Zobrazené prostředí je nezávazný náhled uživatelského rozhraní. Veškerá data jsou ilustrativní a neodpovídají skutečným pozicím ani obchodním výsledkům. Silver Monitor je samostatný nástroj ROOMS MANAGEMENT a není součástí předmětu investice do odštěpného závodu; jeho výstupy slouží provozu závodu při rozhodování o načasování prodeje kovu. Přístup do produkčního prostředí není poskytován.',
+    tab_biz:'B · Business Case',tab_cert:'C · Certifikační laboratoř',tab_legal:'D · Smluvní dokumentace',
+    hero_eyebrow:'ROOMS MANAGEMENT s.r.o. · Most-Rudolice · Česká republika',
+    hero_title:'Recyklace fotovoltaických panelů',
+    hero_sub:'Comton Industriale · Solar Evo 5 · Investiční příležitost · ~1 mil. EUR',
+    hm_inv:'Celková investice',hm_hr:'Zisk / hodinu',hm_ebitda:'EBITDA / rok (Kč)',hm_roi:'Návratnost',
+    s1_tag:'Manažerské shrnutí',s1_title:'Solární panel = 5 cenných komodit + legislativní mandát',
+    c1a:'WEEE direktiva',c1a_t:'EU direktiva 2012/19/EU nařizuje sběr a recyklaci FV panelů. Kolektivní systém REsolar s.r.o. zajišťuje dodávku. Předsmlouva podepsána.',c1a_tag:'Garantovaný vstup',
+    c1b:'Stříbro jako bonus',c1b_t:'Každá tuna panelů obsahuje 0,70 kg stříbra v hodnotě 30 000 Kč. Při dvousměnném provozu 2 688 kg Ag ročně – rafinované, v kvalitě pro banky i průmysl.',
+    c1c:'Řízený řetězec zhodnocení',c1c_t:'Mechanická delaminace na lince Solar Evo 5 → koncentrát Si/Ag → chemické oddělení u Auri Metal → načasování prodeje přes Silver Monitor. Tři články pod jednou koordinací.',
+    s2_tag:'Technologie',s2_title:'Výrobní linka Solar Evo 5 · Comton Industriale',
+    s2_img_cap:'Comton Industriale – Solar Evo 5 · Průmyslová linka · Itálie 🇮🇹',
+    s2_vid:'Video – Solar Evo 5 v provozu',
+    sp_mfr:'Výrobce',sp_model:'Model',sp_cap:'Kapacita',sp_out:'Výstupní komodity',
+    sp_price:'Cena linky',sp_del:'Termín dodání',sp_cert:'Certifikace',sp_origin:'Původ',
+    s3_tag:'Finanční model',s3_title:'1 tuna / hodinu · ~50 panelů',
+    ft_rev:'PŘÍJEM / HODINU',ft_buy:'Nákup FV panelů (1 t)',ft_sale:'PRODEJ VÝSTUPNÍCH KOMODIT',
+    ft_glass:'Sklo (627 kg)',ft_si:'Křemík (126 kg)',ft_cost:'NÁKLADY / HODINU',ft_rev:'VÝNOSY / HODINU · 1 TUNA PANELŮ',ft_buy:'Gate fee – příjem panelů',ft_energy:'Energie (172,5 kW)',
+    ft_staff:'Zaměstnanci (13 os.)',ft_energy:'Energie',ft_mgmt:'Management',ft_other:'Ostatní',ft_profit:'ZISK / HODINU',
+    fp_hrs:'Provozní hodiny / rok',fp_ag:'Stříbro ročně',fp_ag_t:'2 688 kg Ag/rok · 115,2 mil. Kč ročně jen ze stříbra – 66 % tržeb',
+    fp_ebitda:'122,6 mil. Kč/rok · marže 70 % · čistý zisk po odpisech a dani 94,9 mil. Kč',
+    s4_tag:'Investiční nabídka',s4_title:'Odštěpný závod · Franšízový model · 50 / 50',
+    jv_inv_label:'FRANŠÍZANT VKLÁDÁ',jv_inv_desc:'peněžitý vklad do odštěpného závodu',
+    jv_i1:'✓ Výrobní hala · příprava prostor',jv_i2:'✓ Linka Comton Industriale Solar Evo 5',
+    jv_i3:'✓ Provozní kapitál · spuštění',jv_i4:'✓ Audit WEEELABEX · certifikace REsolar',
+    jv_rm_label:'ROOMS MANAGEMENT VKLÁDÁ',jv_rm_amount:'Know-How + Licence',jv_rm_desc:'nepeněžitý vklad — ocenění dle dohody',
+    jv_r1:'✓ IČZ CZU01425 + IČZ CZA01672 · licence',jv_r2:'✓ Technologický know-how · EVA recyklace',
+    jv_r3:'✓ Klíčoví zaměstnanci · management',jv_r4:'✓ Smlouva REsolar s.r.o. · dodávka panelů',
+    jv_footer:'Odštěpný závod RM · Franšízant 50 % zisku · RM 50 % zisku · Správa a provoz zajišťuje RM · Franšízant pasivní role · Model je replikovatelný – Most-Rudolice jako první závod',
+    s5_tag:'Proč investovat',s5_title:'Klíčové výhody projektu',
+    adv1:'⚡ Nízký CAPEX, rychlá návratnost',adv1t:'~1 mil. EUR · plný provoz do 12 měsíců · Solar Evo 5 · minimální riziko',
+    adv2:'🥈 Stříbro jako prémiová komodita',adv2t:'0,70 kg Ag/t panelů · 30 000 Kč hodnoty · 2 688 kg Ag ročně · rafinované stříbro, ne šrot',
+    adv3:'📋 Zákonný mandát – WEEE',adv3t:'EU nařizuje recyklaci FV panelů · REsolar zajišťuje dodávku · smlouva podepsána',
+    adv4:'⚗ 5 výstupních komodit',adv4t:'Al · sklo · Si · Ag · Cu – diverzifikovaný výnos z jednoho vstupu',
+    adv5:'📈 Škálovatelnost',adv5t:'Modulární Solar Evo 5 → navýšení kapacity · možnost druhé linky',
+    adv6:'🌿 ESG + dotace',adv6t:'Cirkulární ekonomika · EU dotace · WEEELABEX · zelené financování',
+    tag_a:'A · DOKUMENTACE TECHNOLOGIE',title_a:'Výrobní linka Solar Evo 5',
+    img_cap:'Comton Industriale – Solar Evo 5 · Průmyslová linka pro recyklaci FV panelů',
+    vid_label:'Video – Solar Evo 5 v provozu',
+    sp_mfr2:'Výrobce',sp_cap2:'Kapacita',sp_out2:'Výstupní komodity',sp_price2:'Cena linky',sp_del2:'Termín dodání',sp_cert2:'Certifikace',sp_origin2:'Původ',
+    ib_proc:'PROCES RECYKLACE',ib_proc_text:'Příjem a evidence panelů → Demontáž Al rámu a junction boxu → Řez panelu → Delaminace skla → Drcení a třídění na vibračním sítu → Výstupní frakce: sklo · plasty · koncentrát Si/Ag · Cu/Sn → Koncentrát Si/Ag postupuje k chemickému oddělení (Auri Metal)',
+    a_docs:'Technická dokumentace',a_docs_sub:'Technické listy Comton Industriale budou přidány',
+    tag_b:'B · BUSINESS CASE',title_b:'Finanční model a investiční příležitost',
+    bm_inv:'Celková investice',bm_hr:'Zisk / hodinu',bm_ebitda:'EBITDA / rok (Kč)',bm_roi:'Návratnost',
+    b_chain_tag:'1 · ŘETĚZEC ZHODNOCENÍ',
+    b_ch1:'Mechanická část – ROOMS MANAGEMENT',b_ch1_t:'Linka Solar Evo 5 provádí demontáž, delaminaci skla a roztřídění na frakce. Výstupem je sklo, hliník, Cu/Sn, plasty a koncentrát Si/Ag.',b_ch1_tag:'Vlastní provoz',
+    b_ch2:'Chemická část – Auri Metal',b_ch2_t:'Koncentrát Si/Ag se chemickou cestou nebo pyrolýzou rozdělí na křemík a rafinované stříbro v kvalitě pro bankovní i průmyslové využití. Auri Metal je placen za službu podle smluvní sazby – nemá podíl na výnosech ani na zisku, ten zůstává celý v odštěpném závodě.',b_ch2_tag:'Placená služba · LOI',
+    b_ch3:'Zhodnocení – Silver Monitor',b_ch3_t:'Vlastní software vyhodnocuje trh a určuje, kdy rafinované stříbro uložit do banky a kdy je prodat průmyslu s příplatkem.',b_ch3_tag:'Marže navíc',
+    b_c7:'Využití kapacity linky',b_mat_tag:'4 · HMOTNOSTNÍ BILANCE · 1 TUNA VSTUPU',
+    b_mt1:'Sklo',b_mt2:'Hliník (rám)',b_mt3:'Koncentrát Si/Ag',b_mt4:'Plasty (EVA, backsheet)',b_mt5:'Měď / cín, elektrodesky',b_mt6:'Ztráty a prach',
+    b_n2b:'Zpracování koncentrátu – Auri Metal (služba)',b_n3b:'Likvidace plastových frakcí',
+    ft_al:'Hliníkový rám (132 kg)',ft_ag:'Stříbro Ag (0,70 kg)',ft_cu:'Měď / cín (9 kg)',ft_revtot:'Výnosy celkem',ft_ref:'Zpracování koncentrátu – Auri Metal (služba)',ft_plast:'Likvidace plastů (77 kg)',
+    fp_hrs_t:'3 840 hodin · dvousměnný provoz Po–Pá · roční tržby 175,5 mil. Kč',
+    cert_lab:'VLASTNÍ LABORATOŘ – ZÁMĚR',cert_lab_t:'Připravuje se zřízení vlastní certifikované laboratoře pro kontrolu obsahu a čistoty stříbra ve výstupním koncentrátu. Jednání s chemičkou se zkušeností z tohoto oboru probíhají. Vlastní laboratoř umožní nezávisle ověřovat obsah Ag v každé šarži a tím posílit vyjednávací pozici vůči rafinačnímu partnerovi.',cert_note:'Certifikační dokumenty a protokoly z auditu WEEELABEX naleznete v záložce D.',
+    b_docs:'Detailní business plán',b_docs_sub:'Kompletní finanční model a projekce budou přidány',
+    b_base:'VÝCHOZÍ PŘEDPOKLAD',b_base_t:'Dvousměnný provoz · pondělí–pátek · 2 × 8 hodin denně · 4 týdny v měsíci. Roční fond 3 840 provozních hodin (48 týdnů), 4 týdny rezerva na plánované odstávky, údržbu a dovolené. Zpracováno 3 840 t panelů ročně. Hmotnostní složení vstupu dle technické dokumentace Compton Industriale.',
+    b_feed_tag:'3 · ZAJIŠTĚNÍ VSTUPNÍ SUROVINY',
+    b_f1:'Panelů k dispozici v ČR',b_f2:'Provozu na plnou kapacitu',b_f3:'Obsaženého stříbra',b_f4:'Instalovaná báze ČR',
+    b_f5:'Instalovaná báze ČR',b_f6:'Aktuálně dostupné k recyklaci',b_f7:'Zajištění toku',b_f8:'Roční spotřeba závodu',b_f9:'Původ materiálu',b_f10:'Stav zajištění',
+    b_f_note_l:'PROČ JE SUROVINY DOST',b_f_note:'Vstupní materiál nevzniká čekáním na konec životnosti panelů. Provozovatelé solárních elektráren vyměňují technologii za novou, zhruba o 30 % výkonnější — na stejné ploše, se stejným připojením a stejnými pozemky získají výrazně vyšší výnos, takže se výměna vyplatí dávno před dosloužením. Sejmuté panely proto existují fyzicky už dnes; nejde o projekci budoucího odpadu, ale o materiál, který je na trhu. Dostupných 70 000 tun pokrývá 18 let provozu na plnou kapacitu a závod z nich odebírá 5,5 % ročně. Závazná smlouva na jejich dodávku je podmíněna dokončením certifikace WEEELABEX — to je jediná otevřená podmínka mezi projektem a smluvně zajištěným vstupem.',
+    b_cal_tag:'2 · PROVOZNÍ KALENDÁŘ',b_c1:'Směnnost',b_c2:'Provozní dny',b_c3:'Hodin měsíčně',b_c4:'Hodin ročně',b_c5:'Zpracovaná tonáž',b_c6:'Personál výroby',
+    b_rev_tag:'5 · VÝNOSY',b_rev_h:'STRUKTURA VÝNOSŮ · 3 840 t / ROK',b_r1:'Gate fee – příjem panelů',b_r2:'Hliníkový rám',b_r3:'Sklo',b_r4:'Křemík',b_r5:'Stříbro Ag',b_r6:'Měď Cu',b_rev_tot:'CELKOVÉ TRŽBY / ROK',
+    b_cost_tag:'6 · NÁKLADY · ROZDĚLENÍ FIXNÍ / VARIABILNÍ',b_var_h:'VARIABILNÍ NÁKLADY (rostou s objemem)',b_n1:'Mzdy výroby · 26 osob',b_n2:'Energie',b_n3:'Provozní materiál, náhradní díly',b_n4:'Variabilní celkem',
+    b_fix_h:'FIXNÍ NÁKLADY (nezávislé na objemu)',b_n5:'Management',b_n6:'Směnový mistr 2. směny',b_n7:'Nájem, pojištění, administrativa',b_n8:'Fixní celkem',b_cost_tot:'NÁKLADY CELKEM / ROK',
+    b_pl_tag:'7 · VÝSLEDOVKA',b_p1:'Tržby',b_p2:'− Variabilní náklady',b_p3:'= Krycí příspěvek',b_p4:'− Fixní náklady',b_p5:'= EBITDA',b_p6:'− Odpisy linky (10 let)',b_p7:'= EBIT',b_p8:'− Daň z příjmu 21 %',b_p9:'ČISTÝ ZISK / ROK',
+    b_m1:'EBITDA / měsíc (Kč)',b_m2:'Podíl franšízanta 50 % (Kč/rok)',b_m3:'Návratnost z čistého zisku',b_m4:'Bod zvratu / rok',
+    b_sc_tag:'8 · CITLIVOSTNÍ ANALÝZA',b_sc_h:'SCÉNÁŘE PODLE VÝVOJE CEN KOMODIT',b_s1:'Konzervativní',b_s2:'Základní',b_s3:'Optimistický',
+    b_lev:'PROVOZNÍ PÁKA',b_lev_t:'Podíl fixních nákladů činí 6,7 % celkových nákladů. Bod zvratu leží na 108 provozních hodinách ročně — 2,8 % plánované kapacity. Model je proto odolný vůči výpadku objemu, ale citlivý na cenu stříbra, které tvoří 65,6 % tržeb. Linka navíc běží na 61 % své maximální kapacity, což představuje rezervu pro navýšení objemu bez dodatečné investice.',
+    b_k1:'Koncentrace na stříbro',b_k1_t:'Ag tvoří 65,6 % tržeb z 0,07 % hmotnosti vstupu. Pokles ceny o 30 % znamená −34,6 mil. Kč EBITDA ročně. Silver Monitor tuto expozici částečně řídí načasováním prodeje, plné zajištění vyžaduje forwardový kontrakt.',b_k1_tag:'Klíčové riziko',
+    b_k2:'Závislost na zpracovateli',b_k2_t:'Chemické oddělení Ag zajišťuje externí dodavatel za smluvní cenu. Sazba 8 000 Kč/t je předpokladem k potvrzení smlouvou. Vlastní certifikovaná laboratoř je v přípravě a umožní nezávislou kontrolu obsahu Ag v každé šarži.',b_k2_tag:'K dořešení',
+    b_k3:'Garantovaný vstup',b_k3_t:'Gate fee 2 500 Kč/t je smluvní příjem od kolektivního systému, nikoli tržní cena. Spolu s WEEE direktivou tvoří protiváhu komoditnímu riziku na výnosové straně.',b_k3_tag:'Stabilizátor',
+    b_note:'Hmotnostní bilance vychází z technické dokumentace Compton Industriale (průměrný panel 22 kg, kapacita linky 75 panelů/h). Model počítá s konzervativním využitím 1 t/h. Sazba za rafinaci koncentrátu Si/Ag je předpokladem k potvrzení smlouvou s Auri Metal. Uvedené hodnoty nezahrnují pracovní kapitál a náběhovou fázi provozu. Ceny komodit k srpnu 2026.',
+    tag_c:'C · CERTIFIKAČNÍ LABORATOŘ',title_c:'WEEELABEX Certifikace',
+    cert_status:'AKTUÁLNÍ STAV',cert_status_text:'Audit WEEELABEX je v průběhu. Podmínka pro uzavření smlouvy s REsolar s.r.o.',
+    cert_weee:'Mezinárodní standard pro recyklaci elektrozařízení. Audit: technologické procesy, výtěžnost, environmentální compliance.',
+    cert_ongoing:'Probíhá',cert_resolar:'Kolektivní systém WEEE pro FV panely. Předsmlouva podepsána. Finální smlouva po certifikaci.',
+    cert_signed:'Předsmlouva podepsána',cert_icz:'IČZ Licence',
+    cert_icz_text:'IČZ CZU01425 – stacionární. IČZ CZA01672 – mobilní. Obě aktivní.',
+    cert_active:'Aktivní',cert_docs:'Certifikační dokumenty',cert_docs_sub:'Přidáno po dokončení auditu WEEELABEX',
+    tag_d:'D · SMLUVNÍ DOKUMENTACE',title_d:'Smluvní zázemí projektu',
+    leg_resolar:'REsolar s.r.o. – Předsmlouva',leg_resolar_t:'Smlouva o smlouvě budoucí na dodávku FV panelů. Podmínka: WEEELABEX.',
+    leg_signed:'Podepsána',leg_comton:'Comton Industriale – Nabídka',
+    leg_comton_t:'Nabídka Solar Evo 5 · instalace + školení + záruka · ~1 mil. EUR · 6 měsíců.',
+    leg_prep:'V přípravě',leg_jv:'JV Smlouva – Odštěpný závod',
+    leg_jv_t:'Franšízová smlouva o odštěpném závodě. Model 50/50. RM zajišťuje provoz, franšízant pasivní role.',
+    leg_prep2:'K přípravě',leg_docs:'Dokumenty ke stažení',leg_docs_sub:'Zpřístupněno po podpisu NDA',
+    dl:'STÁHNOUT ↓',dl2:'STÁHNOUT ↓',dl3:'STÁHNOUT ↓',dl4:'STÁHNOUT ↓',
+    doc_resolar:'LOI – REsolar s.r.o.',
+    doc_resolar_m:'Vyjádření zájmu o budoucí spolupráci · kolektivní systém WEEE pro FV panely · 5. 12. 2025 · PDF',
+    doc_auri:'LOI – Auri Metal, s.r.o.',
+    doc_auri_m:'Vyjádření zájmu o budoucí spolupráci · odbyt kovových frakcí · 10. 12. 2025 · PDF',
+    doc_doi:'WEEELABEX – Declaration of Intent 25-0265',
+    doc_doi_m:'Přihláška do certifikačního řízení · proces PV · kapacita 2 500–10 000 t/rok · 8. 12. 2025 · PDF',
+    doc_b03:'WEEELABEX – B03TR Agreement',
+    doc_b03_m:'Smluvní rámec a podmínky certifikace provozovatele zpracování · Rev 05 · PDF',
+    doc_note:'Provozovatelem zpracovatelského zařízení je EURO-EKOSFERA Trans, s.r.o. (IČO 177 75 451). Oba dopisy o záměru jsou nezávazné a podmíněné získáním všech potřebných oprávnění.',
+    footer_conf:'Důvěrné · Pouze pro autorizované osoby',
+  },
+  en:{
+    lt:'Sign In',ls:'Enter your credentials to access investor documentation',
+    ll_email:'EMAIL',ll_pass:'PASSWORD',lb:'Sign In →',
+    le:'Incorrect email or password.',lf:'ROOMS MANAGEMENT s.r.o. · Authorised access only',
+    hbrand:'Investor Portal',logoutbtn:'Sign Out',
+    tab_overview:'☀ Overview',tab_tech:'A · Technology Documentation',
+    tab_silver:'E · Silver Monitor',tag_e:'E · SILVER MONITOR',title_e:'Software for timing the sale of silver',
+    sm_eu_tag:'SUPPORTING TOOL',sm_eu_title:'EU Solar Recycling — mapping available feedstock',
+    sm_eu_l:'WHAT IT DOES',sm_eu_t:'A supporting tool that maps installed solar capacity across Europe and serves for planning feedstock availability. Silver Monitor is the decisive tool for plant operations; this overview provides context on market size.',
+    sm_badge2:'MOCKUP · DEMO DATA',
+    sm_two_tag:'TWO STREAMS, TWO ROLES',sm_two_title:'What the plant lives on and what accumulates',
+    sm_op_l:'OPERATING MATERIALS',sm_op_d:'glass · aluminium · copper · silicon · gate fee — sold to industry',
+    sm_op1:'✓ Cover 100 % of operating costs (CZK 52.9M)',sm_op2:'✓ Surplus of CZK 7.4M per year',sm_op3:'✓ Ordinary cash flow — wages, energy, refining, rent',sm_op4:'✓ The plant is fully self-financing from them',
+    sm_plus:'independently',sm_ag_l:'SILVER',sm_ag_d:'2,688 kg of refined Ag per year — vault or industry',
+    sm_ag1:'✓ Need not be sold for the plant to operate',sm_ag2:'✓ Bank or industry depending on price development',sm_ag3:'✓ Silver Monitor determines the moment and the channel',sm_ag4:'✓ Accumulates as an asset of the franchise',
+    sm_two_note:'The essential difference from ordinary recycling: operations are paid for by the sale of glass, aluminium, copper and silicon. Silver therefore never has to be sold under cash-flow pressure. It can stay in the vault for as long as Silver Monitor judges the moment unsuitable — and its added value arises even while it remains unsold. The franchise lives on monetising the other materials, while silver grows in its assets.',
+    sm_m1:'Ag added / year',sm_m2:'Accumulated over 5 years',sm_m3:'Operating surplus without Ag (CZK/year)',sm_m4:'Industrial premium over spot',
+
+    sm_what:'WHAT IT DOES',sm_what_t:'The recycling operation produces 2,688 kg of refined silver per year. Silver Monitor evaluates the market and determines when to place the metal in a bank vault and when to sell it to industry at a premium. At this volume, the difference between selling at a poor and a good moment runs into millions of CZK per year – with no additional investment in technology.',
+    sm_c1:'Vault storage',sm_c1_t:'On an upward signal the metal is vaulted and held as an asset. Its refined grade allows storage without further processing.',
+    sm_c2:'Industrial sale',sm_c2_t:'Industrial buyers pay above spot for delivery at the required purity and date. The software tracks when that premium is highest.',
+    sm_c3:'Decision framework',sm_c3_t:'A daily-timeframe neural network and LOKEN v4 read institutional flows. The decision framework converts them into a concrete vault / industry ratio – from maximum accumulation to maximum sale.',
+    sm_ui_tag:'INTERFACE PREVIEW',sm_badge:'MOCKUP · DEMO DATA',
+    sm_note:'The interface shown is a non-binding preview. All data is illustrative and does not represent actual positions or trading results. Silver Monitor is a separate ROOMS MANAGEMENT tool and is not part of the investment in the branch entity; its output supports the plant in deciding when to sell the metal. Access to the production environment is not provided.',
+    tab_biz:'B · Business Case',tab_cert:'C · Certification Lab',tab_legal:'D · Legal Documentation',
+    hero_eyebrow:'ROOMS MANAGEMENT s.r.o. · Most-Rudolice · Czech Republic',
+    hero_title:'Solar Panel Recycling',
+    hero_sub:'Comton Industriale · Solar Evo 5 · Investment Opportunity · ~€1.0M',
+    hm_inv:'Total investment',hm_hr:'Profit / hour',hm_ebitda:'EBITDA / year (CZK)',hm_roi:'Payback period',
+    s1_tag:'Executive Summary',s1_title:'Solar panel = 5 valuable commodities + legal mandate',
+    c1a:'WEEE Directive',c1a_t:'EU Directive 2012/19/EU mandates solar panel collection and recycling. REsolar s.r.o. collective system ensures supply. Pre-agreement signed.',c1a_tag:'Guaranteed input',
+    c1b:'Silver as a bonus',c1b_t:'Each tonne of panels contains 0.70 kg of silver worth CZK 30,000. Two-shift operation yields 2,688 kg Ag per year – refined, at banking and industrial grade.',
+    c1c:'Controlled value chain',c1c_t:'Mechanical delamination on the Solar Evo 5 line → Si/Ag concentrate → chemical separation at Auri Metal → sale timing via Silver Monitor. Three stages under one coordination.',
+    s2_tag:'Technology',s2_title:'Production Line Solar Evo 5 · Comton Industriale',
+    s2_img_cap:'Comton Industriale – Solar Evo 5 · Industrial solar panel recycling line · Italy 🇮🇹',
+    s2_vid:'Video – Solar Evo 5 in operation',
+    sp_mfr:'Manufacturer',sp_model:'Model',sp_cap:'Capacity',sp_out:'Output commodities',
+    sp_price:'Line price',sp_del:'Delivery time',sp_cert:'Certification',sp_origin:'Origin',
+    s3_tag:'Financial Model',s3_title:'1 tonne / hour · ~50 panels',
+    ft_rev:'REVENUE / HOUR',ft_buy:'Purchase of solar panels (1 t)',ft_sale:'COMMODITY SALES',
+    ft_glass:'Glass (627 kg)',ft_si:'Silicon (126 kg)',ft_cost:'COSTS / HOUR',ft_rev:'REVENUE / HOUR · 1 TONNE OF PANELS',ft_buy:'Gate fee – panel intake',ft_energy:'Energy (172.5 kW)',
+    ft_staff:'Staff (13 persons)',ft_energy:'Energy',ft_mgmt:'Management',ft_other:'Other',ft_profit:'PROFIT / HOUR',
+    fp_hrs:'Operating hours / year',fp_ag:'Silver per year',fp_ag_t:'2,688 kg Ag/year · CZK 115.2M per year from silver alone – 66 % of revenue',
+    fp_ebitda:'CZK 122.6M/year · margin 70 % · net profit after depreciation and tax CZK 94.9M',
+    s4_tag:'Investment Offer',s4_title:'Branch Entity · Franchise Model · 50 / 50',
+    jv_inv_label:'FRANCHISEE CONTRIBUTES',jv_inv_desc:'cash contribution to branch entity',
+    jv_i1:'✓ Production hall · space preparation',jv_i2:'✓ Comton Industriale Solar Evo 5 line',
+    jv_i3:'✓ Working capital · operational launch',jv_i4:'✓ WEEELABEX audit · REsolar certification',
+    jv_rm_label:'ROOMS MANAGEMENT CONTRIBUTES',jv_rm_amount:'Know-How + Licence',jv_rm_desc:'non-cash contribution — valuation by agreement',
+    jv_r1:'✓ IČZ CZU01425 + IČZ CZA01672 · licences',jv_r2:'✓ Technological know-how · EVA recycling',
+    jv_r3:'✓ Key personnel · management',jv_r4:'✓ REsolar s.r.o. agreement · panel supply',
+    jv_footer:'RM Branch Entity · Franchisee 50% of profit · RM 50% of profit · Operations managed by RM · Franchisee passive role · The model is replicable – Most-Rudolice as the first plant',
+    s5_tag:'Why invest',s5_title:'Key advantages of the project',
+    adv1:'⚡ Low CAPEX, fast ROI',adv1t:'~€1.0M · full operation within 12 months · Solar Evo 5 · minimal risk',
+    adv2:'🥈 Silver as premium commodity',adv2t:'0.70 kg Ag/t of panels · CZK 30,000 of value · 2,688 kg Ag per year · refined silver, not scrap',
+    adv3:'📋 Legal mandate – WEEE',adv3t:'EU mandates solar panel recycling · REsolar ensures supply · agreement signed',
+    adv4:'⚗ 5 output commodities',adv4t:'Al · glass · Si · Ag · Cu – diversified yield from one input',
+    adv5:'📈 Scalability',adv5t:'Modular Solar Evo 5 → capacity increase · option for 2nd line',
+    adv6:'🌿 ESG + grants',adv6t:'Circular economy · EU grants · WEEELABEX · green financing',
+    tag_a:'A · TECHNOLOGY DOCUMENTATION',title_a:'Production Line Solar Evo 5',
+    img_cap:'Comton Industriale – Solar Evo 5 · Industrial solar panel recycling line',
+    vid_label:'Video – Solar Evo 5 in operation',
+    sp_mfr2:'Manufacturer',sp_cap2:'Capacity',sp_out2:'Output commodities',sp_price2:'Line price',sp_del2:'Delivery time',sp_cert2:'Certification',sp_origin2:'Origin',
+    ib_proc:'RECYCLING PROCESS',ib_proc_text:'Panel intake and registration → Al frame and junction box removal → Panel cutting → Glass delamination → Shredding and screening → Output fractions: glass · plastics · Si/Ag concentrate · Cu/Sn → The Si/Ag concentrate proceeds to chemical separation (Auri Metal)',
+    a_docs:'Technical Documentation',a_docs_sub:'Comton Industriale technical sheets will be added',
+    tag_b:'B · BUSINESS CASE',title_b:'Financial model and investment opportunity',
+    bm_inv:'Total investment',bm_hr:'Profit / hour',bm_ebitda:'EBITDA / year (CZK)',bm_roi:'Payback period',
+    b_chain_tag:'1 · VALUE CHAIN',
+    b_ch1:'Mechanical stage – ROOMS MANAGEMENT',b_ch1_t:'The Solar Evo 5 line performs dismantling, glass delamination and separation into fractions. Outputs are glass, aluminium, Cu/Sn, plastics and Si/Ag concentrate.',b_ch1_tag:'Own operation',
+    b_ch2:'Chemical stage – Auri Metal',b_ch2_t:'The Si/Ag concentrate is separated chemically or by pyrolysis into silicon and refined silver of a grade suitable for both banking and industrial use. Auri Metal is paid a contractual service fee – it holds no share of revenue or profit, which remains entirely within the branch enterprise.',b_ch2_tag:'Paid service · LOI',
+    b_ch3:'Monetisation – Silver Monitor',b_ch3_t:'Proprietary software evaluates the market and determines when to vault the refined silver and when to sell it to industry at a premium.',b_ch3_tag:'Additional margin',
+    b_c7:'Line capacity utilisation',b_mat_tag:'4 · MASS BALANCE · 1 TONNE OF INPUT',
+    b_mt1:'Glass',b_mt2:'Aluminium (frame)',b_mt3:'Si/Ag concentrate',b_mt4:'Plastics (EVA, backsheet)',b_mt5:'Copper / tin, circuit boards',b_mt6:'Losses and dust',
+    b_n2b:'Concentrate processing – Auri Metal (service)',b_n3b:'Plastic fraction disposal',
+    ft_al:'Aluminium frame (132 kg)',ft_ag:'Silver Ag (0.70 kg)',ft_cu:'Copper / tin (9 kg)',ft_revtot:'Total revenue',ft_ref:'Concentrate processing – Auri Metal (service)',ft_plast:'Plastics disposal (77 kg)',
+    fp_hrs_t:'3,840 hours · two-shift operation Mon–Fri · annual revenue CZK 175.5M',
+    cert_lab:'IN-HOUSE LABORATORY – PLANNED',cert_lab_t:'An in-house certified laboratory is being prepared to verify silver content and purity in the output concentrate. Discussions with an experienced chemist are under way. The laboratory will allow independent verification of Ag content in every batch, strengthening the negotiating position towards the refining partner.',cert_note:'Certification documents and WEEELABEX audit records are available in tab D.',
+    b_docs:'Detailed Business Plan',b_docs_sub:'Full financial model and projections will be added',
+    b_base:'BASE ASSUMPTION',b_base_t:'Two-shift operation · Monday–Friday · 2 × 8 hours per day · 4 weeks per month. Annual capacity 3,840 operating hours (48 weeks), 4 weeks reserved for planned shutdowns, maintenance and holidays. 3,840 t of panels processed per year. Input mass composition per Compton Industriale technical documentation.',
+    b_feed_tag:'3 · FEEDSTOCK SECURITY',
+    b_f1:'Panels available in CZ',b_f2:'Of operation at full capacity',b_f3:'Silver contained',b_f4:'Installed base CZ',
+    b_f5:'Installed base CZ',b_f6:'Currently available for recycling',b_f7:'Flow secured by',b_f8:'Annual plant consumption',b_f9:'Material origin',b_f10:'Securing status',
+    b_f_note_l:'WHY THERE IS ENOUGH FEEDSTOCK',b_f_note:'Input material does not come from waiting for panels to reach end of life. Solar plant operators are replacing their technology with new panels roughly 30 % more powerful — on the same land, with the same grid connection, they gain substantially higher output, so replacement pays off long before the panels wear out. The removed panels therefore already exist physically; this is not a projection of future waste but material that is on the market. The available 70,000 tonnes cover 18 years of operation at full capacity and the plant draws 5.5 % of it per year. A binding supply contract is conditional on completing WEEELABEX certification — the single open condition between the project and contractually secured feedstock.',
+    b_cal_tag:'2 · OPERATING CALENDAR',b_c1:'Shift pattern',b_c2:'Operating days',b_c3:'Hours per month',b_c4:'Hours per year',b_c5:'Processed tonnage',b_c6:'Production staff',
+    b_rev_tag:'5 · REVENUE',b_rev_h:'REVENUE STRUCTURE · 3,840 t / YEAR',b_r1:'Gate fee – panel intake',b_r2:'Aluminium frame',b_r3:'Glass',b_r4:'Silicon',b_r5:'Silver Ag',b_r6:'Copper Cu',b_rev_tot:'TOTAL REVENUE / YEAR',
+    b_cost_tag:'6 · COSTS · FIXED / VARIABLE SPLIT',b_var_h:'VARIABLE COSTS (scale with volume)',b_n1:'Production wages · 26 staff',b_n2:'Energy',b_n3:'Consumables, spare parts',b_n4:'Total variable',
+    b_fix_h:'FIXED COSTS (independent of volume)',b_n5:'Management',b_n6:'2nd shift supervisor',b_n7:'Rent, insurance, administration',b_n8:'Total fixed',b_cost_tot:'TOTAL COSTS / YEAR',
+    b_pl_tag:'7 · PROFIT & LOSS',b_p1:'Revenue',b_p2:'− Variable costs',b_p3:'= Contribution margin',b_p4:'− Fixed costs',b_p5:'= EBITDA',b_p6:'− Depreciation (10 years)',b_p7:'= EBIT',b_p8:'− Corporate tax 21 %',b_p9:'NET PROFIT / YEAR',
+    b_m1:'EBITDA / month (CZK)',b_m2:'Franchisee share 50 % (CZK/year)',b_m3:'Payback from net profit',b_m4:'Break-even / year',
+    b_sc_tag:'8 · SENSITIVITY ANALYSIS',b_sc_h:'SCENARIOS BY COMMODITY PRICE DEVELOPMENT',b_s1:'Conservative',b_s2:'Base case',b_s3:'Optimistic',
+    b_lev:'OPERATING LEVERAGE',b_lev_t:'Fixed costs represent 6.7 % of total costs. Break-even sits at 108 operating hours per year — 2.8 % of planned capacity. The model is therefore resilient to volume shortfalls, but sensitive to the silver price, which accounts for 65.6 % of revenue. The line also runs at 61 % of its maximum capacity, leaving headroom to increase volume without further investment.',
+    b_k1:'Silver concentration',b_k1_t:'Ag generates 65.6 % of revenue from 0.07 % of input mass. A 30 % price decline means −CZK 34.6M EBITDA per year. Silver Monitor partly manages this exposure through sale timing; full cover requires a forward contract.',b_k1_tag:'Key risk',
+    b_k2:'Processor dependency',b_k2_t:'Chemical Ag separation is provided by an external contractor at a contractual price. The rate of CZK 8,000/t is an assumption to be confirmed by contract. An in-house certified laboratory is in preparation and will enable independent verification of Ag content in every batch.',b_k2_tag:'To be settled',
+    b_k3:'Guaranteed input',b_k3_t:'The gate fee of 2,500 CZK/t is contractual income from the collective system, not a market price. Together with the WEEE Directive it counterbalances commodity risk on the revenue side.',b_k3_tag:'Stabiliser',
+    b_note:'The model builds on the hourly calculation shown in the Overview (profit CZK 24,031/h) and extends it with a fixed/variable cost split, depreciation and taxation. Figures are projections at full capacity and full yield; they exclude working capital requirements and the ramp-up phase. Commodity prices as of December 2025.',
+    tag_c:'C · CERTIFICATION LAB',title_c:'WEEELABEX Certification',
+    cert_status:'CURRENT STATUS',cert_status_text:'WEEELABEX Conformity & Verification audit ongoing. Prerequisite for REsolar s.r.o. supply agreement.',
+    cert_weee:'International standard for e-waste recycling. Audit covers processes, recovery rates and environmental compliance.',
+    cert_ongoing:'In progress',cert_resolar:'WEEE collective system for solar panels. Pre-agreement signed. Final agreement after certification.',
+    cert_signed:'Pre-agreement signed',cert_icz:'IČZ Licences',
+    cert_icz_text:'IČZ CZU01425 – stationary. IČZ CZA01672 – mobile. Both active.',
+    cert_active:'Active',cert_docs:'Certification Documents',cert_docs_sub:'Added upon WEEELABEX audit completion',
+    tag_d:'D · LEGAL DOCUMENTATION',title_d:'Project legal framework',
+    leg_resolar:'REsolar s.r.o. – Pre-agreement',leg_resolar_t:'Preliminary supply agreement for solar panels. Condition: WEEELABEX.',
+    leg_signed:'Signed',leg_comton:'Comton Industriale – Offer',
+    leg_comton_t:'Solar Evo 5 offer · installation + training + warranty · ~€1.0M · 6 months.',
+    leg_prep:'In preparation',leg_jv:'JV Agreement – Branch Entity',
+    leg_jv_t:'Franchise agreement for the branch entity. 50/50 model. RM manages operations, franchisee passive.',
+    leg_prep2:'To be prepared',leg_docs:'Documents for Download',leg_docs_sub:'Available after NDA signing',
+    dl:'DOWNLOAD ↓',dl2:'DOWNLOAD ↓',dl3:'DOWNLOAD ↓',dl4:'DOWNLOAD ↓',
+    doc_resolar:'LOI – REsolar s.r.o.',
+    doc_resolar_m:'Letter of intent for future cooperation · WEEE collective system for PV panels · 5 Dec 2025 · PDF',
+    doc_auri:'LOI – Auri Metal, s.r.o.',
+    doc_auri_m:'Letter of intent for future cooperation · offtake of metal fractions · 10 Dec 2025 · PDF',
+    doc_doi:'WEEELABEX – Declaration of Intent 25-0265',
+    doc_doi_m:'Application for the certification procedure · PV stream · capacity 2,500–10,000 t/year · 8 Dec 2025 · PDF',
+    doc_b03:'WEEELABEX – B03TR Agreement',
+    doc_b03_m:'Contractual framework and conditions for treatment operator certification · Rev 05 · PDF',
+    doc_note:'The treatment facility is operated by EURO-EKOSFERA Trans, s.r.o. (Reg. No. 177 75 451). Both letters of intent are non-binding and conditional upon obtaining all required permits.',
+    footer_conf:'Confidential · Authorised access only',
+  },
+  kk:{
+    lt:'Кіру',ls:'Инвестор порталына кіру үшін деректеріңізді енгізіңіз',
+    ll_email:'ЭЛЕКТРОНДЫҚ ПОШТА',ll_pass:'ҚУП СӨЗ',lb:'Кіру →',
+    le:'Электрондық пошта немесе құпия сөз қате.',lf:'ROOMS MANAGEMENT s.r.o. · Тек уәкілетті тұлғалар',
+    hbrand:'Инвестор порталы',logoutbtn:'Шығу',
+    tab_overview:'☀ Шолу',tab_tech:'А · Технология құжаттамасы',
+    tab_silver:'E · Silver Monitor',tag_e:'E · SILVER MONITOR',title_e:'Күміс сатуын уақыттау бағдарламасы',
+    sm_eu_tag:'ҚОСЫМША ҚҰРАЛ',sm_eu_title:'EU Solar Recycling — қолжетімді шикізатты карталау',
+    sm_eu_l:'НЕ ІСТЕЙДІ',sm_eu_t:'Еуропадағы орнатылған күн қуатын карталайтын және шикізат қолжетімділігін жоспарлауға арналған қосымша құрал. Зауыт жұмысы үшін шешуші – Silver Monitor; бұл шолу нарық көлемі туралы контекст береді.',
+    sm_badge2:'MOCKUP · ДЕМО ДЕРЕКТЕР',
+    sm_two_tag:'ЕКІ АҒЫН, ЕКІ РӨЛ',sm_two_title:'Зауыт неден өмір сүреді және не жинақталады',
+    sm_op_l:'ӨНДІРІСТІК ШИКІЗАТ',sm_op_d:'шыны · алюминий · мыс · кремний · gate fee — өнеркәсіпке сатылады',
+    sm_op1:'✓ Операциялық шығындардың 100 % жабады (52,9 млн CZK)',sm_op2:'✓ Жылына 7,4 млн CZK артық',sm_op3:'✓ Күнделікті ақша ағыны — жалақы, энергия, тазарту, жалдау',sm_op4:'✓ Зауыт солардан толық өзін-өзі қаржыландырады',
+    sm_plus:'тәуелсіз',sm_ag_l:'КҮМІС',sm_ag_d:'жылына 2 688 кг тазартылған Ag — қойма немесе өнеркәсіп',
+    sm_ag1:'✓ Зауыт жұмыс істеуі үшін сатылуы міндетті емес',sm_ag2:'✓ Баға дамуына қарай банк немесе өнеркәсіп',sm_ag3:'✓ Silver Monitor сәті мен арнасын анықтайды',sm_ag4:'✓ Франчайзидің активі ретінде жинақталады',
+    sm_two_note:'Кәдімгі қайта өңдеуден түбегейлі айырмашылығы: өндіріс шыны, алюминий, мыс және кремний сатылымынан төленеді. Сондықтан күмісті ақша ағыны қысымымен сатудың қажеті жоқ. Silver Monitor сәтті қолайлы деп бағалағанша қоймада қала береді — және оның қосымша құны физикалық сатылмаған кезде де қалыптасады. Франчайзи басқа шикізатты монетизациялаудан өмір сүреді, ал күміс оның активінде өседі.',
+    sm_m1:'Жылдық Ag өсімі',sm_m2:'5 жылдағы жинақ',sm_m3:'Ag-сыз операциялық артық (CZK/жыл)',sm_m4:'Споттан жоғары өнеркәсіптік үстеме',
+
+    sm_what:'НЕ ІСТЕЙДІ',sm_what_t:'Қайта өңдеу жылына 2 688 кг тазартылған күміс береді. Silver Monitor нарықты бағалап, металды банк қоймасына қою немесе өнеркәсіпке үстеме бағамен сату уақытын анықтайды. Мұндай көлемде қолайсыз және қолайлы сәтте сатудың айырмасы жылына бірнеше миллион CZK жетеді – технологияға қосымша инвестициясыз.',
+    sm_c1:'Банк қоймасында сақтау',sm_c1_t:'Өсу сигналы кезінде металл қоймаға қойылып, актив ретінде ұсталады. Тазартылған сапасы қосымша өңдеусіз сақтауға мүмкіндік береді.',
+    sm_c2:'Өнеркәсіптік сату',sm_c2_t:'Өнеркәсіптік сатып алушы қажетті тазалық пен мерзімде жеткізу үшін спот бағадан жоғары төлейді. Бағдарлама үстеме ең жоғары сәтті бақылайды.',
+    sm_c3:'Шешім қабылдау жүйесі',sm_c3_t:'Күндік таймфреймдегі нейрондық желі мен LOKEN v4 институттардың қозғалысын оқиды. Шешім жүйесі олардан нақты қойма / өнеркәсіп арақатынасын шығарады – максималды жинақтаудан максималды сатуға дейін.',
+    sm_ui_tag:'ИНТЕРФЕЙС АЛДЫН АЛА КӨРІНІСІ',sm_badge:'MOCKUP · ДЕМО ДЕРЕКТЕР',
+    sm_note:'Көрсетілген интерфейс – міндетті емес алдын ала көрініс. Барлық деректер иллюстрациялық және нақты позициялар мен сауда нәтижелерін көрсетпейді. Silver Monitor – ROOMS MANAGEMENT-тің жеке құралы және бөлімшеге салынатын инвестицияның нысаны емес; оның нәтижелері зауытқа металды сату уақытын шешуге көмектеседі. Өндірістік ортаға қолжетімділік берілмейді.',
+    tab_biz:'Ә · Бизнес-кейс',tab_cert:'Б · Сертификаттау',tab_legal:'В · Шарттық құжаттама',
+    hero_eyebrow:'ROOMS MANAGEMENT s.r.o. · Most-Rudolice · Чехия',
+    hero_title:'Күн панельдерін қайта өңдеу',
+    hero_sub:'Comton Industriale · Solar Evo 5 · Инвестициялық мүмкіндік · ~1 млн EUR',
+    hm_inv:'Жалпы инвестиция',hm_hr:'Кіріс / сағ',hm_ebitda:'EBITDA / жыл (CZK)',hm_roi:'Өтелу мерзімі',
+    s1_tag:'Басқарушылық қорытынды',s1_title:'Күн панелі = 5 бағалы тауар + заңнамалық міндет',
+    c1a:'WEEE директивасы',c1a_t:'ЕО директивасы 2012/19/EU күн панельдерін жинауды және қайта өңдеуді міндеттейді. REsolar жеткізуді қамтамасыз етеді.',c1a_tag:'Кепілді кіріс',
+    c1b:'Күміс бонус ретінде',c1b_t:'Панельдің әр тоннасында құны 30 000 CZK болатын 0,70 кг күміс бар. Екі ауысымды жұмыста жылына 2 688 кг Ag – банк және өнеркәсіп сапасында тазартылған.',
+    c1c:'Химиялық EVA қайта өңдеу',c1c_t:'EVA фольгасын бөлудің меншікті әдісі → Ag, Cu, Si тікелей экстракциясы. Comton Industriale – Solar Evo 5.',
+    s2_tag:'Технология',s2_title:'Solar Evo 5 өндірістік желісі · Comton Industriale',
+    s2_img_cap:'Comton Industriale – Solar Evo 5 · Күн панельдерін қайта өңдеуге арналған өнеркәсіптік желі · Италия 🇮🇹',
+    s2_vid:'Бейне – Solar Evo 5 жұмыста',
+    sp_mfr:'Өндіруші',sp_model:'Модель',sp_cap:'Өнімділік',sp_out:'Шығыс тауарлары',
+    sp_price:'Желі бағасы',sp_del:'Жеткізу мерзімі',sp_cert:'Сертификат',sp_origin:'Шығу елі',
+    s3_tag:'Қаржылық модель',s3_title:'Сағатына 1 тонна · ~50 панель',
+    ft_rev:'КІРІС / САҒАТ',ft_buy:'Күн панельдерін сатып алу (1 т)',ft_sale:'ТАУАР САТЫЛЫМЫ',
+    ft_glass:'Шыны (775 кг)',ft_si:'Кремний (75 кг)',ft_cost:'ШЫҒЫНДАР / САҒАТ',
+    ft_staff:'Қызметкерлер (13 адам)',ft_energy:'Энергия',ft_mgmt:'Менеджмент',ft_other:'Басқа',ft_profit:'КІРіС / САҒАТ',
+    fp_hrs:'Жұмыс сағаты / жыл',fp_ag:'Жылдық күміс',fp_ag_t:'2 688 кг Ag/жыл · тек күмістен жылына 115,2 млн CZK – кірістің 66 %',
+    fp_ebitda:'122,6 млн CZK/жыл · маржа 70 % · амортизация мен салықтан кейінгі таза пайда 94,9 млн CZK',
+    s4_tag:'Инвестициялық ұсыныс',s4_title:'Бөлімше · Франчайзинг · 50 / 50',
+    jv_inv_label:'ФРАНЧАЙЗИ САЛАДЫ',jv_inv_desc:'бөлімшеге ақшалай салым',
+    jv_i1:'✓ Өндірістік зал · дайындық',jv_i2:'✓ Comton Industriale Solar Evo 5 желісі',
+    jv_i3:'✓ Айналым капиталы · іске қосу',jv_i4:'✓ WEEELABEX аудиті · REsolar сертификаты',
+    jv_rm_label:'ROOMS MANAGEMENT САЛАДЫ',jv_rm_amount:'Ноу-хау + Лицензия',jv_rm_desc:'ақшалай емес салым — келісім бойынша бағалау',
+    jv_r1:'✓ IČZ CZU01425 + IČZ CZA01672 · лицензиялар',jv_r2:'✓ Технологиялық ноу-хау · EVA',
+    jv_r3:'✓ Негізгі қызметкерлер · менеджмент',jv_r4:'✓ REsolar s.r.o. шарты · панельдер',
+    jv_footer:'RM бөлімшесі · Франчайзи 50% пайда · RM 50% пайда · RM басқарады · Франчайзи пассивті · Модель қайталанатын – Most-Rudolice бірінші зауыт ретінде',
+    s5_tag:'Неге инвестициялау керек',s5_title:'Жобаның негізгі артықшылықтары',
+    adv1:'⚡ Төмен CAPEX, жылдам өтелу',adv1t:'~1 млн EUR · 12 айда толық жұмыс · Solar Evo 5 · минималды тәуекел',
+    adv2:'🥈 Күміс – бағалы тауар',adv2t:'0,70 кг Ag/т панель · 30 000 CZK құн · жылына 2 688 кг Ag · тазартылған күміс, сынық емес',
+    adv3:'📋 Заңнамалық міндет – WEEE',adv3t:'ЕО FV панельдерін қайта өңдеуді міндеттейді · REsolar жеткізеді',
+    adv4:'⚗ 5 шығыс тауары',adv4t:'Al · шыны · Si · Ag · Cu – бір кіріс материалынан',
+    adv5:'📈 Масштабтау мүмкіндігі',adv5t:'Модульдік Solar Evo 5 → қуатты арттыру · екінші желі мүмкіндігі',
+    adv6:'🌿 ESG + гранттар',adv6t:'Циркулярлы экономика · ЕО гранттары · WEEELABEX · жасыл қаржыландыру',
+    tag_a:'А · ТЕХНОЛОГИЯ ҚҰЖАТТАМАСЫ',title_a:'Solar Evo 5 өндірістік желісі',
+    img_cap:'Comton Industriale – Solar Evo 5 · Өнеркәсіптік қайта өңдеу желісі',
+    vid_label:'Бейне – Solar Evo 5 жұмыста',
+    sp_mfr2:'Өндіруші',sp_cap2:'Өнімділік',sp_out2:'Шығыс тауарлары',sp_price2:'Желі бағасы',sp_del2:'Жеткізу',sp_cert2:'Сертификат',sp_origin2:'Шығу елі',
+    ib_proc:'ҚАЙТА ӨҢДЕУ ПРОЦЕСІ',ib_proc_text:'Қабылдау → Al жақтауы → Шыны → EVA химиялық өңдеу → Ag · Cu · Si → Жіберу',
+    a_docs:'Техникалық құжаттама',a_docs_sub:'Comton Industriale техникалық парақтары қосылады',
+    tag_b:'Ә · БИЗНЕС-КЕЙС',title_b:'Қаржылық модель және инвестициялық мүмкіндік',
+    bm_inv:'Жалпы инвестиция',bm_hr:'Кіріс / сағ',bm_ebitda:'EBITDA / жыл (CZK)',bm_roi:'Өтелу мерзімі',
+    b_chain_tag:'1 · ҚҰНДЫЛЫҚ ТІЗБЕГІ',
+    b_ch1:'Механикалық кезең – ROOMS MANAGEMENT',b_ch1_t:'Solar Evo 5 желісі бөлшектеу, шыныны қабатсыздандыру және фракцияларға бөлуді орындайды. Шығысы: шыны, алюминий, Cu/Sn, пластик және Si/Ag концентраты.',b_ch1_tag:'Меншікті өндіріс',
+    b_ch2:'Химиялық кезең – Auri Metal',b_ch2_t:'Si/Ag концентраты химиялық жолмен немесе пиролизбен кремний мен банк және өнеркәсіп сапасындағы тазартылған күміске бөлінеді. Auri Metal шарттық тариф бойынша қызметі үшін ақы алады – кіріс пен пайдада үлесі жоқ, олар толығымен бөлімшеде қалады.',b_ch2_tag:'Ақылы қызмет · LOI',
+    b_ch3:'Монетизация – Silver Monitor',b_ch3_t:'Меншікті бағдарламалық жасақтама нарықты бағалап, тазартылған күмісті банкке қою немесе өнеркәсіпке үстеме бағамен сату уақытын анықтайды.',b_ch3_tag:'Қосымша маржа',
+    b_c7:'Желі қуатын пайдалану',b_mat_tag:'4 · МАССА БАЛАНСЫ · 1 ТОННА КІРІС',
+    b_mt1:'Шыны',b_mt2:'Алюминий (жақтау)',b_mt3:'Si/Ag концентраты',b_mt4:'Пластик (EVA, backsheet)',b_mt5:'Мыс / қалайы, электрондық платалар',b_mt6:'Шығындар мен шаң',
+    b_n2b:'Концентратты өңдеу – Auri Metal (қызмет)',b_n3b:'Пластик фракцияларын жою',
+    ft_al:'Алюминий жақтау (132 кг)',ft_ag:'Күміс Ag (0,70 кг)',ft_cu:'Мыс / қалайы (9 кг)',ft_revtot:'Жалпы кіріс',ft_ref:'Концентратты өңдеу – Auri Metal (қызмет)',ft_plast:'Пластикті жою (77 кг)',
+    fp_hrs_t:'3 840 сағат · екі ауысымды жұмыс дс–жм · жылдық кіріс 175,5 млн CZK',
+    cert_lab:'МЕНШІКТІ ЗЕРТХАНА – ЖОСПАР',cert_lab_t:'Шығыс концентратындағы күмістің мөлшері мен тазалығын бақылау үшін меншікті сертификатталған зертхана құру дайындалуда. Тәжірибелі химикпен келіссөздер жүріп жатыр. Зертхана әр партиядағы Ag мөлшерін тәуелсіз тексеруге және тазарту серіктесіне қатысты позицияны күшейтуге мүмкіндік береді.',cert_note:'Сертификаттау құжаттары мен WEEELABEX аудит хаттамалары D қосымшасында.',
+    b_docs:'Толық бизнес-жоспар',b_docs_sub:'Қаржылық модель мен болжамдар қосылады',
+    b_base:'НЕГІЗГІ БОЛЖАМ',b_base_t:'Екі ауысымды жұмыс · дүйсенбі–жұма · күніне 2 × 8 сағат · айына 4 апта. Жылдық қор 3 840 жұмыс сағаты (48 апта), 4 апта жоспарлы тоқтау, техникалық қызмет және демалысқа резерв. Желі қуаты 1 т/сағ → жылына 3 840 т панель (~192 000 дана).',
+    b_feed_tag:'3 · ШИКІЗАТПЕН ҚАМТАМАСЫЗ ЕТУ',
+    b_f1:'ЧР-да қолжетімді панельдер',b_f2:'Толық қуатпен жұмыс',b_f3:'Құрамындағы күміс',b_f4:'ЧР орнатылған базасы',
+    b_f5:'ЧР орнатылған базасы',b_f6:'Қазір қайта өңдеуге қолжетімді',b_f7:'Ағынды қамтамасыз ету',b_f8:'Зауыттың жылдық тұтынуы',b_f9:'Материалдың шығу тегі',b_f10:'Қамтамасыз ету мәртебесі',
+    b_f_note_l:'ШИКІЗАТ НЕЛІКТЕН ЖЕТКІЛІКТІ',b_f_note:'Кіріс материалы панельдердің қызмет мерзімін күтуден пайда болмайды. Күн электр станцияларының операторлары технологияны шамамен 30 % қуаттырақ жаңасына ауыстырып жатыр — сол алаңда, сол қосылыммен әлдеқайда жоғары өнім алады, сондықтан ауыстыру тозудан әлдеқайда бұрын тиімді. Шешілген панельдер сондықтан бүгін физикалық түрде бар; бұл болашақ қалдықтың болжамы емес, нарықтағы материал. Қолжетімді 70 000 тонна толық қуатпен 18 жыл жұмысты жабады, зауыт жылына оның 5,5 % алады. Жеткізу туралы міндетті шарт WEEELABEX сертификаттауын аяқтауға байланысты — бұл жоба мен шартпен қамтамасыз етілген шикізат арасындағы жалғыз ашық шарт.',
+    b_cal_tag:'2 · ЖҰМЫС КҮНТІЗБЕСІ',b_c1:'Ауысым режимі',b_c2:'Жұмыс күндері',b_c3:'Айына сағат',b_c4:'Жылына сағат',b_c5:'Өңделген тоннаж',b_c6:'Өндіріс персоналы',
+    b_rev_tag:'5 · КІРІСТЕР',b_rev_h:'КІРІС ҚҰРЫЛЫМЫ · 3 840 т / ЖЫЛ',b_r1:'Gate fee – панельдерді қабылдау',b_r2:'Алюминий жақтау',b_r3:'Шыны',b_r4:'Кремний',b_r5:'Күміс Ag',b_r6:'Мыс Cu',b_rev_tot:'ЖАЛПЫ КІРІС / ЖЫЛ',
+    b_cost_tag:'6 · ШЫҒЫНДАР · ТҰРАҚТЫ / АЙНЫМАЛЫ',b_var_h:'АЙНЫМАЛЫ ШЫҒЫНДАР (көлемге байланысты)',b_n1:'Өндіріс жалақысы · 26 адам',b_n2:'Энергия',b_n3:'Шығын материалдары, қосалқы бөлшектер',b_n4:'Айнымалы барлығы',
+    b_fix_h:'ТҰРАҚТЫ ШЫҒЫНДАР (көлемге тәуелсіз)',b_n5:'Менеджмент',b_n6:'2-ауысым шебері',b_n7:'Жалдау, сақтандыру, әкімшілік',b_n8:'Тұрақты барлығы',b_cost_tot:'ШЫҒЫНДАР БАРЛЫҒЫ / ЖЫЛ',
+    b_pl_tag:'7 · ПАЙДА МЕН ШЫҒЫН',b_p1:'Кіріс',b_p2:'− Айнымалы шығындар',b_p3:'= Жабу үлесі',b_p4:'− Тұрақты шығындар',b_p5:'= EBITDA',b_p6:'− Амортизация (10 жыл)',b_p7:'= EBIT',b_p8:'− Табыс салығы 21 %',b_p9:'ТАЗА ПАЙДА / ЖЫЛ',
+    b_m1:'EBITDA / ай (CZK)',b_m2:'Франчайзи үлесі 50 % (CZK/жыл)',b_m3:'Таза пайдадан өтелу',b_m4:'Залалсыздық нүктесі / жыл',
+    b_sc_tag:'8 · СЕЗІМТАЛДЫҚ ТАЛДАУЫ',b_sc_h:'ТАУАР БАҒАСЫНЫҢ ДАМУЫ БОЙЫНША СЦЕНАРИЙЛЕР',b_s1:'Консервативті',b_s2:'Негізгі',b_s3:'Оптимистік',
+    b_lev:'ОПЕРАЦИЯЛЫҚ ИІНТІРЕК',b_lev_t:'Тұрақты шығындар жалпы шығындардың 6,7 % құрайды. Залалсыздық нүктесі жылына 108 жұмыс сағатында — жоспарлы қуаттың 2,8 %. Модель көлем тапшылығына төзімді, бірақ кірістің 65,6 % құрайтын күміс бағасына сезімтал. Оның үстіне желі максималды қуатының 61 % жұмыс істейді, бұл қосымша инвестициясыз көлемді ұлғайтуға резерв береді.',
+    b_k1:'Күміске тәуелділік',b_k1_t:'Ag кірістің 65,6 % кіріс массасының 0,07 % үлесінен береді. Бағаның 30 % төмендеуі жылына −34,6 млн CZK EBITDA білдіреді. Silver Monitor бұл тәуекелді сату уақытын таңдау арқылы ішінара басқарады, толық қорғаныс форвард шартын талап етеді.',b_k1_tag:'Негізгі тәуекел',
+    b_k2:'Өңдеушіге тәуелділік',b_k2_t:'Ag химиялық бөлуді сыртқы мердігер шарттық баға бойынша орындайды. 8 000 CZK/т тарифі шартпен расталуы тиіс болжам. Меншікті сертификатталған зертхана дайындалуда және әр партиядағы Ag мөлшерін тәуелсіз тексеруге мүмкіндік береді.',b_k2_tag:'Шешілуде',
+    b_k3:'Кепілдендірілген кіріс',b_k3_t:'2 500 CZK/т gate fee — нарықтық баға емес, ұжымдық жүйеден түсетін шарттық кіріс. WEEE директивасымен бірге кіріс жағындағы тауар тәуекеліне қарсы салмақ болады.',b_k3_tag:'Тұрақтандырғыш',
+    b_note:'Масса балансы Compton Industriale техникалық құжаттамасына негізделген (орташа панель 22 кг, желі қуаты 75 панель/сағ). Модель 1 т/сағ консервативті пайдалануды есептейді. Si/Ag концентратын тазарту тарифі Auri Metal-мен шартта расталуы тиіс болжам. Көрсетілген мәндер айналым капиталы мен іске қосу кезеңін қамтымайды. Тауар бағалары 2026 жылғы тамызға.',
+    tag_c:'Б · СЕРТИФИКАТТАУ',title_c:'WEEELABEX Сертификаттауы',
+    cert_status:'АҒЫМДАҒЫ КҮЙ',cert_status_text:'WEEELABEX аудиті жүргізілуде. REsolar шартының алғышарты.',
+    cert_weee:'Электрондық қалдықтарды қайта өңдеудің халықаралық стандарты.',
+    cert_ongoing:'Жүргізілуде',cert_resolar:'WEEE ұжымдық жүйесі. Алдын ала шарт қол қойылды.',
+    cert_signed:'Алдын ала шарт қол қойылды',cert_icz:'IČZ Лицензиялары',
+    cert_icz_text:'IČZ CZU01425 – стационар. IČZ CZA01672 – мобильді. Екеуі де белсенді.',
+    cert_active:'Белсенді',cert_docs:'Сертификаттау құжаттары',cert_docs_sub:'WEEELABEX аудитінен кейін қосылады',
+    tag_d:'В · ШАРТТЫҚ ҚҰЖАТТАМА',title_d:'Жобаның шарттық базасы',
+    leg_resolar:'REsolar s.r.o. – Алдын ала шарт',leg_resolar_t:'Күн панельдерін жеткізуге алдын ала шарт. Шарт: WEEELABEX.',
+    leg_signed:'Қол қойылды',leg_comton:'Comton Industriale – Ұсыныс',
+    leg_comton_t:'Solar Evo 5 ұсынысы · ~1 млн EUR · 6 ай.',
+    leg_prep:'Дайындалуда',leg_jv:'БК Шарты – Бөлімше',
+    leg_jv_t:'Бөлімше бойынша франчайзинг шарты. 50/50 моделі. RM басқарады, франчайзи пассивті.',
+    leg_prep2:'Дайындалатын',leg_docs:'Жүктеу үшін құжаттар',leg_docs_sub:'NDA-дан кейін қолжетімді',
+    dl:'ЖҮКТЕУ ↓',dl2:'ЖҮКТЕУ ↓',dl3:'ЖҮКТЕУ ↓',dl4:'ЖҮКТЕУ ↓',
+    doc_resolar:'LOI – REsolar s.r.o.',
+    doc_resolar_m:'Болашақ ынтымақтастық туралы ниет хаты · күн панельдеріне арналған WEEE ұжымдық жүйесі · 05.12.2025 · PDF',
+    doc_auri:'LOI – Auri Metal, s.r.o.',
+    doc_auri_m:'Болашақ ынтымақтастық туралы ниет хаты · металл фракцияларын өткізу · 10.12.2025 · PDF',
+    doc_doi:'WEEELABEX – Declaration of Intent 25-0265',
+    doc_doi_m:'Сертификаттау рәсіміне өтініш · PV ағыны · қуаты 2 500–10 000 т/жыл · 08.12.2025 · PDF',
+    doc_b03:'WEEELABEX – B03TR Agreement',
+    doc_b03_m:'Өңдеу операторын сертификаттаудың шарттық негізі · Rev 05 · PDF',
+    doc_note:'Өңдеу қондырғысын EURO-EKOSFERA Trans, s.r.o. (ЖСН 177 75 451) пайдаланады. Екі ниет хаты да міндетті емес және барлық қажетті рұқсаттарды алуға байланысты.',
+    footer_conf:'Құпия · Тек уәкілетті тұлғалар үшін',
+  }
+};
+
+let currentLang='cs';
+
+function applyLang(lang){
+  currentLang=lang;
+  const t=T[lang];
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const k=el.getAttribute('data-i');
+    if(t[k]!==undefined) el.textContent=t[k];
+  });
+  ['lt','ls','lb','lf','hbrand','logoutbtn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&t[id]) el.textContent=t[id];
+  });
+  document.getElementById('ll-email').textContent=t.ll_email;
+  document.getElementById('ll-pass').textContent=t.ll_pass;
+  ['overview','tech','biz','cert','legal','silver'].forEach(k=>{
+    const btn=document.getElementById('tab-'+k);
+    if(btn&&t['tab_'+k]) btn.textContent=t['tab_'+k];
+  });
+  ['cs','en','kk'].forEach(l=>{
+    document.getElementById('btn-'+l).classList.toggle('active',l===lang);
+  });
+  localStorage.setItem('portal_lang',lang);
+}
+
+function setLang(lang){applyLang(lang);}
+
+function doLogin(){
+  const email=document.getElementById('inp-email').value.trim().toLowerCase();
+  const pass=document.getElementById('inp-pass').value;
+  const err=document.getElementById('login-err');
+  if(USERS[email]&&USERS[email]===pass){
+    err.style.display='none';
+    sessionStorage.setItem('portal_user',email);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('user-tag').textContent=email;
+  } else {
+    err.style.display='block';
+    err.textContent=T[currentLang].le;
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('portal_user');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('inp-pass').value='';
+}
+
+function smTab(e,id){
+  const app=e.target.closest('.mock-app');
+  app.querySelectorAll('.mock-pane').forEach(p=>p.classList.remove('on'));
+  app.querySelectorAll('.mock-tab').forEach(t=>t.classList.remove('on'));
+  app.querySelector('#'+id).classList.add('on');
+  e.target.classList.add('on');
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name+'-content').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+(function(){
+  const savedLang=localStorage.getItem('portal_lang')||'cs';
+  applyLang(savedLang);
+  const user=sessionStorage.getItem('portal_user');
+  if(user&&USERS[user]){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('user-tag').textContent=user;
+  }
+})();
+</script>
+</body>
+</html>
