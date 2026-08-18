@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 132" width="180" height="132" role="img" aria-label="XAGNET">
+  <defs>
+    <linearGradient id="xagT" x1="14%" y1="0%" x2="86%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8fb"/><stop offset="38%" stop-color="#c3d0da"/>
+      <stop offset="70%" stop-color="#8fa1b1"/><stop offset="100%" stop-color="#cfdae3"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(58,4)">
+    <path d="M32 5.5 L55 18.75 V45.25 L32 58.5 L9 45.25 V18.75 Z" fill="none" stroke="url(#xagT)" stroke-width="2.6" stroke-linejoin="round"/>
+    <g stroke="url(#xagT)" stroke-width="2.2" stroke-linecap="round" opacity="0.92">
+      <path d="M32 32 V11"/><path d="M32 32 L13.8 42.6"/><path d="M32 32 L50.2 42.6"/>
+    </g>
+    <g fill="url(#xagT)">
+      <circle cx="32" cy="11" r="3.7"/><circle cx="13.8" cy="42.6" r="3.7"/><circle cx="50.2" cy="42.6" r="3.7"/>
+    </g>
+    <circle cx="32" cy="32" r="6.2" fill="url(#xagT)"/><circle cx="32" cy="32" r="2.4" fill="#0b1016"/>
+  </g>
+  <text x="90" y="106" text-anchor="middle" font-family="Inter,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="31" letter-spacing="2">
+    <tspan font-weight="700" fill="url(#xagT)">XAG</tspan><tspan font-weight="300" fill="#8fa1b1">NET</tspan>
+  </text>
+  <text x="90" y="122" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="8" letter-spacing="4" fill="#6d7f8f">SILVER FROM SOLAR</text>
+</svg>

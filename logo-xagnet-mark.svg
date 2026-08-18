@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="XAGNET">
+  <defs>
+    <linearGradient id="xagSilver" x1="14%" y1="0%" x2="86%" y2="100%">
+      <stop offset="0%" stop-color="#f4f8fb"/>
+      <stop offset="38%" stop-color="#c3d0da"/>
+      <stop offset="70%" stop-color="#8fa1b1"/>
+      <stop offset="100%" stop-color="#cfdae3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- krystalová mřížka / hexagon -->
+  <path d="M32 5.5 L55 18.75 V45.25 L32 58.5 L9 45.25 V18.75 Z"
+        fill="none" stroke="url(#xagSilver)" stroke-width="2.6"
+        stroke-linejoin="round"/>
+
+  <!-- spoje z uzlů do středu -->
+  <g stroke="url(#xagSilver)" stroke-width="2.2" stroke-linecap="round" opacity="0.92">
+    <path d="M32 32 V11"/>
+    <path d="M32 32 L13.8 42.6"/>
+    <path d="M32 32 L50.2 42.6"/>
+  </g>
+
+  <!-- uzly sítě -->
+  <g fill="url(#xagSilver)">
+    <circle cx="32" cy="11" r="3.7"/>
+    <circle cx="13.8" cy="42.6" r="3.7"/>
+    <circle cx="50.2" cy="42.6" r="3.7"/>
+  </g>
+
+  <!-- střed -->
+  <circle cx="32" cy="32" r="6.2" fill="url(#xagSilver)"/>
+  <circle cx="32" cy="32" r="2.4" fill="#0b1016"/>
+</svg>
